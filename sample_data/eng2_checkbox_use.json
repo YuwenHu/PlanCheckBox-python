@@ -1,0 +1,732 @@
+{
+  "meta": {
+    "groupName": "英二",
+    "subject": "英语二",
+    "kind": "study",
+    "examDate": "2027-12-19",
+    "planStart": "2026-11-04",
+    "generatedAt": "2026-11-04T16:00:00+08:00",
+    "version": 1
+  },
+  "months": [
+    {
+      "id": "2026-11",
+      "label": "2026年11月",
+      "weeks": [
+        {
+          "id": "2026-11-02",
+          "index": 1,
+          "label": "第1周",
+          "start": "2026-11-02",
+          "end": "2026-11-08",
+          "days": [
+            {
+              "date": "2026-11-04",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261104-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-06",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261106-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-08",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261108-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 100,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-11-09",
+          "index": 2,
+          "label": "第2周",
+          "start": "2026-11-09",
+          "end": "2026-11-15",
+          "days": [
+            {
+              "date": "2026-11-09",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261109-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-11",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261111-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-13",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261113-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-15",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261115-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 100,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-11-16",
+          "index": 3,
+          "label": "第3周",
+          "start": "2026-11-16",
+          "end": "2026-11-22",
+          "days": [
+            {
+              "date": "2026-11-16",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261116-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-18",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261118-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-20",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261120-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-22",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261122-01",
+                  "title": "阅读二刷：英语二 2018（4 篇精读 + 错因归类）（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 80,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "EN-20261122-02",
+                  "title": "阅读二刷：英语二 2019",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 20,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-11-23",
+          "index": 4,
+          "label": "第4周",
+          "start": "2026-11-23",
+          "end": "2026-11-29",
+          "days": [
+            {
+              "date": "2026-11-23",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261123-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-25",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261125-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-27",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261127-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-29",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261129-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 100,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-12",
+      "label": "2026年12月",
+      "weeks": [
+        {
+          "id": "2026-11-30",
+          "index": 5,
+          "label": "第5周",
+          "start": "2026-11-30",
+          "end": "2026-12-06",
+          "days": [
+            {
+              "date": "2026-11-30",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261130-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-02",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261202-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-04",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261204-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-06",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261206-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 100,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-12-07",
+          "index": 6,
+          "label": "第6周",
+          "start": "2026-12-07",
+          "end": "2026-12-13",
+          "days": [
+            {
+              "date": "2026-12-07",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261207-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-09",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261209-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-11",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261211-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-13",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261213-01",
+                  "title": "阅读二刷：英语二 2019（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 20,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "EN-20261213-02",
+                  "title": "阅读二刷：英语二 2020",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 80,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-12-14",
+          "index": 7,
+          "label": "第7周",
+          "start": "2026-12-14",
+          "end": "2026-12-20",
+          "days": [
+            {
+              "date": "2026-12-14",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261214-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-16",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261216-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-18",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261218-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-20",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261220-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 100,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-12-21",
+          "index": 8,
+          "label": "第8周",
+          "start": "2026-12-21",
+          "end": "2026-12-27",
+          "days": [
+            {
+              "date": "2026-12-21",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261221-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-23",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261223-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-25",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261225-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-27",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261227-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 100,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-12-28",
+          "index": 9,
+          "label": "第9周",
+          "start": "2026-12-28",
+          "end": "2027-01-03",
+          "days": [
+            {
+              "date": "2026-12-28",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261228-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-30",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20261230-01",
+                  "title": "阅读二刷：英语二 2020（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-01-01",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20270101-01",
+                  "title": "阅读二刷：英语二 2021",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 60,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "节假日（2027 年放假安排为官方未公布，按推定值排）"
+            },
+            {
+              "date": "2027-01-03",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "EN-20270103-01",
+                  "title": "阅读二刷：英语二 2021（续）",
+                  "topic": "阅读A",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

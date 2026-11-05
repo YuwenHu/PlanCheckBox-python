@@ -1,0 +1,649 @@
+{
+  "meta": {
+    "groupName": "408",
+    "subject": "计算机学科专业基础（408）",
+    "kind": "study",
+    "examDate": "2027-12-19",
+    "planStart": "2026-11-04",
+    "generatedAt": "2026-11-04T16:00:00+08:00",
+    "version": 1
+  },
+  "months": [
+    {
+      "id": "2026-11",
+      "label": "2026年11月",
+      "weeks": [
+        {
+          "id": "2026-11-02",
+          "index": 1,
+          "label": "第1周",
+          "start": "2026-11-02",
+          "end": "2026-11-08",
+          "days": [
+            {
+              "date": "2026-11-05",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261105-01",
+                  "title": "线性表：顺序表、单/双链表与常见操作",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-07",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261107-01",
+                  "title": "线性表：顺序表、单/双链表与常见操作（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 195,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2026-11-09",
+          "index": 2,
+          "label": "第2周",
+          "start": "2026-11-09",
+          "end": "2026-11-15",
+          "days": [
+            {
+              "date": "2026-11-10",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261110-01",
+                  "title": "线性表：顺序表、单/双链表与常见操作（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-12",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261112-01",
+                  "title": "线性表：顺序表、单/双链表与常见操作（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-14",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261114-01",
+                  "title": "线性表：顺序表、单/双链表与常见操作（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 195,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2026-11-16",
+          "index": 3,
+          "label": "第3周",
+          "start": "2026-11-16",
+          "end": "2026-11-22",
+          "days": [
+            {
+              "date": "2026-11-17",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261117-01",
+                  "title": "线性表：顺序表、单/双链表与常见操作（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 60,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "CS408-20261117-02",
+                  "title": "栈、队列与循环队列",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 30,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-19",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261119-01",
+                  "title": "栈、队列与循环队列（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-21",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261121-01",
+                  "title": "栈、队列与循环队列（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 195,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2026-11-23",
+          "index": 4,
+          "label": "第4周",
+          "start": "2026-11-23",
+          "end": "2026-11-29",
+          "days": [
+            {
+              "date": "2026-11-24",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261124-01",
+                  "title": "栈、队列与循环队列（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-26",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261126-01",
+                  "title": "栈、队列与循环队列（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 75,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "CS408-20261126-02",
+                  "title": "树与二叉树：性质、四种遍历（递归/非递归）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 15,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-28",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261128-01",
+                  "title": "树与二叉树：性质、四种遍历（递归/非递归）（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 195,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-12",
+      "label": "2026年12月",
+      "weeks": [
+        {
+          "id": "2026-11-30",
+          "index": 5,
+          "label": "第5周",
+          "start": "2026-11-30",
+          "end": "2026-12-06",
+          "days": [
+            {
+              "date": "2026-12-01",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261201-01",
+                  "title": "树与二叉树：性质、四种遍历（递归/非递归）（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-03",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261203-01",
+                  "title": "树与二叉树：性质、四种遍历（递归/非递归）（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-05",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261205-01",
+                  "title": "树与二叉树：性质、四种遍历（递归/非递归）（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 195,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2026-12-07",
+          "index": 6,
+          "label": "第6周",
+          "start": "2026-12-07",
+          "end": "2026-12-13",
+          "days": [
+            {
+              "date": "2026-12-08",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261208-01",
+                  "title": "树与二叉树：性质、四种遍历（递归/非递归）（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-10",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261210-01",
+                  "title": "树与二叉树：性质、四种遍历（递归/非递归）（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-12",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261212-01",
+                  "title": "树与二叉树：性质、四种遍历（递归/非递归）（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 75,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "CS408-20261212-02",
+                  "title": "数据结构：绪论、算法与复杂度分析",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 120,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2026-12-14",
+          "index": 7,
+          "label": "第7周",
+          "start": "2026-12-14",
+          "end": "2026-12-20",
+          "days": [
+            {
+              "date": "2026-12-15",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261215-01",
+                  "title": "数据结构：绪论、算法与复杂度分析（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-17",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261217-01",
+                  "title": "数据结构：绪论、算法与复杂度分析（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-19",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261219-01",
+                  "title": "串与 KMP 模式匹配",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 195,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2026-12-21",
+          "index": 8,
+          "label": "第8周",
+          "start": "2026-12-21",
+          "end": "2026-12-27",
+          "days": [
+            {
+              "date": "2026-12-22",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261222-01",
+                  "title": "串与 KMP 模式匹配（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-24",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261224-01",
+                  "title": "串与 KMP 模式匹配（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 75,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "CS408-20261224-02",
+                  "title": "数据结构阶段复盘（线性表~树）",
+                  "topic": "综合复盘",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 15,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-26",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261226-01",
+                  "title": "数据结构阶段复盘（线性表~树）（续）",
+                  "topic": "综合复盘",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 195,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2026-12-28",
+          "index": 9,
+          "label": "第9周",
+          "start": "2026-12-28",
+          "end": "2027-01-03",
+          "days": [
+            {
+              "date": "2026-12-29",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261229-01",
+                  "title": "数据结构阶段复盘（线性表~树）（续）",
+                  "topic": "综合复盘",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-31",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20261231-01",
+                  "title": "数据结构阶段复盘（线性表~树）（续）",
+                  "topic": "综合复盘",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 60,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-01-01",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20270101-01",
+                  "title": "图：存储结构、DFS/BFS 遍历",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 105,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "CS408-20270101-02",
+                  "title": "图：存储结构、DFS/BFS 遍历（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 10,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "节假日（2027 年放假安排为官方未公布，按推定值排）"
+            },
+            {
+              "date": "2027-01-02",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20270102-01",
+                  "title": "图：存储结构、DFS/BFS 遍历（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "CS408-20270102-02",
+                  "title": "图：存储结构、DFS/BFS 遍历（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 10,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-01-03",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "CS408-20270103-01",
+                  "title": "图：存储结构、DFS/BFS 遍历（续）",
+                  "topic": "数据结构",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 10,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

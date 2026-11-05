@@ -1,0 +1,389 @@
+{
+  "meta": {
+    "groupName": "政治",
+    "subject": "政治",
+    "kind": "study",
+    "examDate": "2027-12-19",
+    "planStart": "2026-11-04",
+    "generatedAt": "2026-11-04T16:00:00+08:00",
+    "version": 1
+  },
+  "months": [
+    {
+      "id": "2027-07",
+      "label": "2027年7月",
+      "weeks": [
+        {
+          "id": "2027-06-28",
+          "index": 1,
+          "label": "第1周",
+          "start": "2027-06-28",
+          "end": "2027-07-04",
+          "days": [
+            {
+              "date": "2027-07-04",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270704-01",
+                  "title": "马原：唯物论与辩证法（对立统一 / 质量互变）",
+                  "topic": "马原",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2027-07-05",
+          "index": 2,
+          "label": "第2周",
+          "start": "2027-07-05",
+          "end": "2027-07-11",
+          "days": [
+            {
+              "date": "2027-07-11",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270711-01",
+                  "title": "马原：唯物论与辩证法（对立统一 / 质量互变）（续）",
+                  "topic": "马原",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2027-07-12",
+          "index": 3,
+          "label": "第3周",
+          "start": "2027-07-12",
+          "end": "2027-07-18",
+          "days": [
+            {
+              "date": "2027-07-18",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270718-01",
+                  "title": "马原：认识论与唯物史观",
+                  "topic": "马原",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2027-07-19",
+          "index": 4,
+          "label": "第4周",
+          "start": "2027-07-19",
+          "end": "2027-07-25",
+          "days": [
+            {
+              "date": "2027-07-25",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270725-01",
+                  "title": "马原：认识论与唯物史观（续）",
+                  "topic": "马原",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2027-07-26",
+          "index": 5,
+          "label": "第5周",
+          "start": "2027-07-26",
+          "end": "2027-08-01",
+          "days": [
+            {
+              "date": "2027-08-01",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270801-01",
+                  "title": "史纲：近代史时间线与重大事件",
+                  "topic": "史纲",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2027-08",
+      "label": "2027年8月",
+      "weeks": [
+        {
+          "id": "2027-08-02",
+          "index": 6,
+          "label": "第6周",
+          "start": "2027-08-02",
+          "end": "2027-08-08",
+          "days": [
+            {
+              "date": "2027-08-08",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270808-01",
+                  "title": "史纲：近代史时间线与重大事件（续）",
+                  "topic": "史纲",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2027-08-09",
+          "index": 7,
+          "label": "第7周",
+          "start": "2027-08-09",
+          "end": "2027-08-15",
+          "days": [
+            {
+              "date": "2027-08-15",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270815-01",
+                  "title": "史纲：近代史时间线与重大事件（续）",
+                  "topic": "史纲",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2027-08-16",
+          "index": 8,
+          "label": "第8周",
+          "start": "2027-08-16",
+          "end": "2027-08-22",
+          "days": [
+            {
+              "date": "2027-08-19",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270819-01",
+                  "title": "史纲：近代史时间线与重大事件（续）",
+                  "topic": "史纲",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-08-20",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270820-01",
+                  "title": "史纲：近代史时间线与重大事件（续）",
+                  "topic": "史纲",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 30,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-08-22",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270822-01",
+                  "title": "史纲：近代史时间线与重大事件（续）",
+                  "topic": "史纲",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 80,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "POL-20270822-02",
+                  "title": "新思想：中国式现代化、高质量发展与新质生产力",
+                  "topic": "新思想",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 70,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "2027-08-23",
+          "index": 9,
+          "label": "第9周",
+          "start": "2027-08-23",
+          "end": "2027-08-29",
+          "days": [
+            {
+              "date": "2027-08-23",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270823-01",
+                  "title": "新思想：中国式现代化、高质量发展与新质生产力（续）",
+                  "topic": "新思想",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 30,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-08-24",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270824-01",
+                  "title": "新思想：中国式现代化、高质量发展与新质生产力（续）",
+                  "topic": "新思想",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-08-25",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270825-01",
+                  "title": "新思想：中国式现代化、高质量发展与新质生产力（续）",
+                  "topic": "新思想",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-08-26",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270826-01",
+                  "title": "新思想：中国式现代化、高质量发展与新质生产力（续）",
+                  "topic": "新思想",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 30,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-08-27",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270827-01",
+                  "title": "新思想：中国式现代化、高质量发展与新质生产力（续）",
+                  "topic": "新思想",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-08-29",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "POL-20270829-01",
+                  "title": "新思想：中国式现代化、高质量发展与新质生产力（续）",
+                  "topic": "新思想",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 150,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

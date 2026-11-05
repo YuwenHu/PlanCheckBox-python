@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# PyInstaller
+dist/
+build/.cache/
+build/*.log
+*.spec.bak
+PlanCheckBox.exe
+
+# 本地状态（源码态会落在仓库根，不应入库）
+config.json
+session.json
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.tmp
+.pcb-*.tmp

@@ -1,0 +1,1581 @@
+{
+  "meta": {
+    "groupName": "数二",
+    "subject": "数学二",
+    "kind": "study",
+    "examDate": "2027-12-19",
+    "planStart": "2026-11-04",
+    "generatedAt": "2026-11-04T16:00:00+08:00",
+    "version": 1
+  },
+  "months": [
+    {
+      "id": "2026-11",
+      "label": "2026年11月",
+      "weeks": [
+        {
+          "id": "2026-11-02",
+          "index": 1,
+          "label": "第1周",
+          "start": "2026-11-02",
+          "end": "2026-11-08",
+          "days": [
+            {
+              "date": "2026-11-04",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261104-01",
+                  "title": "连续性与间断点：分类、判定与题型",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261104-02",
+                  "title": "连续性与间断点：分类、判定与题型（续）",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-05",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261105-01",
+                  "title": "连续性与间断点：分类、判定与题型（续）",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261105-02",
+                  "title": "连续性与间断点：分类、判定与题型（续）",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-06",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261106-01",
+                  "title": "连续性与间断点：分类、判定与题型（续）",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261106-02",
+                  "title": "连续性与间断点：分类、判定与题型（续）",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-07",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261107-01",
+                  "title": "连续性与间断点：分类、判定与题型（续）",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261107-02",
+                  "title": "连续性与间断点：分类、判定与题型（续）",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-08",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261108-01",
+                  "title": "连续性与间断点：分类、判定与题型（续）",
+                  "topic": "函数与极限",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261108-02",
+                  "title": "导数定义、可导性与分段点求导",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-11-09",
+          "index": 2,
+          "label": "第2周",
+          "start": "2026-11-09",
+          "end": "2026-11-15",
+          "days": [
+            {
+              "date": "2026-11-09",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261109-01",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261109-02",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-10",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261110-01",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261110-02",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-11",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261111-01",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261111-02",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-12",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261112-01",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261112-02",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-13",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261113-01",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261113-02",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-14",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261114-01",
+                  "title": "导数定义、可导性与分段点求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 100,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261114-02",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 20,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261114-03",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-15",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261115-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261115-02",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-11-16",
+          "index": 3,
+          "label": "第3周",
+          "start": "2026-11-16",
+          "end": "2026-11-22",
+          "days": [
+            {
+              "date": "2026-11-16",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261116-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261116-02",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-17",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261117-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261117-02",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-18",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261118-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-19",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261119-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-20",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261120-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-21",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261121-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261121-02",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-22",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261122-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261122-02",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-11-23",
+          "index": 4,
+          "label": "第4周",
+          "start": "2026-11-23",
+          "end": "2026-11-29",
+          "days": [
+            {
+              "date": "2026-11-23",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261123-01",
+                  "title": "求导法则：复合、隐函数、参数方程、对数求导（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 80,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261123-02",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 10,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-24",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261124-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-25",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261125-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-26",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261126-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-27",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261127-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-28",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261128-01",
+                  "title": "过关测试（真题抽题 15 题）：函数与极限",
+                  "topic": "过关测试",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 45,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261128-02",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 75,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261128-03",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-29",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261129-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 75,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261129-02",
+                  "title": "机动·重测/订正（第 1 次，45 分钟，用缓冲）",
+                  "topic": "机动",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 45,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261129-03",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2026-12",
+      "label": "2026年12月",
+      "weeks": [
+        {
+          "id": "2026-11-30",
+          "index": 5,
+          "label": "第5周",
+          "start": "2026-11-30",
+          "end": "2026-12-06",
+          "days": [
+            {
+              "date": "2026-11-30",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261130-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-01",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261201-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-02",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261202-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-03",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261203-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-04",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261204-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-05",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261205-01",
+                  "title": "中值定理：罗尔 / 拉格朗日 / 柯西与辅助函数（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 60,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261205-02",
+                  "title": "单调性、极值、最值与方程根的讨论",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 60,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261205-03",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-06",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261206-01",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261206-02",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-12-07",
+          "index": 6,
+          "label": "第6周",
+          "start": "2026-12-07",
+          "end": "2026-12-13",
+          "days": [
+            {
+              "date": "2026-12-07",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261207-01",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-08",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261208-01",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-09",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261209-01",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-10",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261210-01",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-11",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261211-01",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-12",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261212-01",
+                  "title": "单调性、极值、最值与方程根的讨论（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 60,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261212-02",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 60,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261212-03",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-13",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261213-01",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261213-02",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-12-14",
+          "index": 7,
+          "label": "第7周",
+          "start": "2026-12-14",
+          "end": "2026-12-20",
+          "days": [
+            {
+              "date": "2026-12-14",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261214-01",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-15",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261215-01",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-16",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261216-01",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-17",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261217-01",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-18",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261218-01",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-19",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261219-01",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261219-02",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-20",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261220-01",
+                  "title": "基础题型专练：极限计算（等价无穷小/洛必达/泰勒）（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 55,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261220-02",
+                  "title": "高阶导数、微分与导数几何意义",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 65,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261220-03",
+                  "title": "高阶导数、微分与导数几何意义（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-12-21",
+          "index": 8,
+          "label": "第8周",
+          "start": "2026-12-21",
+          "end": "2026-12-27",
+          "days": [
+            {
+              "date": "2026-12-21",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261221-01",
+                  "title": "高阶导数、微分与导数几何意义（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-22",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261222-01",
+                  "title": "高阶导数、微分与导数几何意义（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-23",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261223-01",
+                  "title": "高阶导数、微分与导数几何意义（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-24",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261224-01",
+                  "title": "高阶导数、微分与导数几何意义（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-25",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261225-01",
+                  "title": "高阶导数、微分与导数几何意义（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 30,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261225-02",
+                  "title": "基础题型专练：导数与切线",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 60,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-26",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261226-01",
+                  "title": "过关测试（真题抽题 15 题）：导数与微分",
+                  "topic": "过关测试",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 45,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261226-02",
+                  "title": "基础题型专练：导数与切线（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 75,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261226-03",
+                  "title": "基础题型专练：导数与切线（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-27",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261227-01",
+                  "title": "基础题型专练：导数与切线（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 75,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261227-02",
+                  "title": "机动·重测/订正（第 2 次，45 分钟，用缓冲）",
+                  "topic": "机动",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 45,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20261227-03",
+                  "title": "基础题型专练：导数与切线（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 5,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "心理咨询 60 分钟 + 缓冲 30 分钟，已从当日可用时长扣除"
+            }
+          ]
+        },
+        {
+          "id": "2026-12-28",
+          "index": 9,
+          "label": "第9周",
+          "start": "2026-12-28",
+          "end": "2027-01-03",
+          "days": [
+            {
+              "date": "2026-12-28",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261228-01",
+                  "title": "基础题型专练：导数与切线（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-29",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261229-01",
+                  "title": "基础题型专练：导数与切线（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-30",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261230-01",
+                  "title": "基础题型专练：导数与切线（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 90,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-12-31",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20261231-01",
+                  "title": "基础题型专练：导数与切线（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P1",
+                  "minutes": 40,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-01-01",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20270101-01",
+                  "title": "泰勒公式与不等式证明",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 30,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20270101-02",
+                  "title": "泰勒公式与不等式证明（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 20,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ],
+              "note": "节假日（2027 年放假安排为官方未公布，按推定值排）"
+            },
+            {
+              "date": "2027-01-02",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20270102-01",
+                  "title": "泰勒公式与不等式证明（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20270102-02",
+                  "title": "泰勒公式与不等式证明（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 20,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2027-01-03",
+              "type": "study",
+              "tasks": [
+                {
+                  "id": "M2-20270103-01",
+                  "title": "泰勒公式与不等式证明（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 120,
+                  "slot": "早",
+                  "done": false,
+                  "doneAt": null
+                },
+                {
+                  "id": "M2-20270103-02",
+                  "title": "泰勒公式与不等式证明（续）",
+                  "topic": "一元微分学",
+                  "kind": "study",
+                  "priority": "P0",
+                  "minutes": 25,
+                  "slot": "下午",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
