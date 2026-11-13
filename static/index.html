@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanCheckBox · 纸间计划</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='8' fill='%231C6E54'/%3E%3Cpath d='M9 16.5l5 5 9-11' stroke='%23FFFDF7' stroke-width='3.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div class="bg-wash" aria-hidden="true"></div>
+
+<header class="topbar">
+  <button id="sidebarToggle" class="icon-btn sidebar-toggle" title="计划列表" aria-label="打开计划列表">
+    <svg viewBox="0 0 20 20" width="18" height="18"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="26" height="26"><rect x="2" y="2" width="28" height="28" rx="8" fill="currentColor"/><path class="brand-check" d="M9 16.5l5 5 9-11" stroke="#FFFDF7" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="brand-name">PlanCheckBox</span>
+    <span class="brand-sub">纸间计划</span>
+  </div>
+
+  <div class="topbar-center">
+    <div class="view-switch" role="tablist" aria-label="视图切换">
+      <span class="switch-pill" aria-hidden="true"></span>
+      <button data-view="month" role="tab">月</button>
+      <button data-view="week" role="tab">周</button>
+      <button data-view="day" role="tab">日</button>
+    </div>
+    <div class="date-nav">
+      <button id="prevBtn" class="icon-btn" title="上一页（←）" aria-label="上一个时间段">
+        <svg viewBox="0 0 20 20" width="16" height="16"><path d="M12.5 4.5L7 10l5.5 5.5" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="todayBtn" class="today-btn" title="回到今天（T）">今天</button>
+      <button id="nextBtn" class="icon-btn" title="下一页（→）" aria-label="下一个时间段">
+        <svg viewBox="0 0 20 20" width="16" height="16"><path d="M7.5 4.5L13 10l-5.5 5.5" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span id="rangeLabel" class="range-label"></span>
+    </div>
+  </div>
+
+  <div class="topbar-actions">
+    <div class="search-box">
+      <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="8.6" cy="8.6" r="5.4" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M12.8 12.8L17 17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <input id="searchInput" type="text" placeholder="搜索任务" autocomplete="off" aria-label="搜索任务">
+      <kbd class="search-kbd">/</kbd>
+      <button id="searchClear" class="search-clear hidden" aria-label="清空搜索">×</button>
+    </div>
+    <button id="importBtn" class="ghost-btn" title="导入 JSON 计划文件（也可直接拖入页面）">
+      <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><path d="M10 3v9m0 0l-3.4-3.4M10 12l3.4-3.4M4 16.5h12" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>导入</span>
+    </button>
+    <button id="newPlanBtn" class="primary-btn" title="新建计划（N）">
+      <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>新建计划</span><kbd>N</kbd>
+    </button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar" class="sidebar" aria-label="我的计划">
+    <div class="sidebar-head">
+      <h2>我的计划 <span id="planCount" class="count-badge">0</span></h2>
+      <select id="sortSelect" class="sort-select" aria-label="计划排序">
+        <option value="custom">自定义顺序</option>
+        <option value="name">按名称</option>
+        <option value="progress">按进度</option>
+        <option value="tasks">按任务数</option>
+      </select>
+    </div>
+    <button id="allPlansBtn" class="all-plans-btn">
+      <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.6" stroke="currentColor" stroke-width="1.6" fill="none"/><rect x="11" y="3" width="6" height="6" rx="1.6" stroke="currentColor" stroke-width="1.6" fill="none"/><rect x="3" y="11" width="6" height="6" rx="1.6" stroke="currentColor" stroke-width="1.6" fill="none"/><rect x="11" y="11" width="6" height="6" rx="1.6" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+      全部计划
+    </button>
+    <div id="planList" class="plan-list"></div>
+    <div class="sidebar-foot">
+      <button id="exportAllBtn" class="ghost-btn small">
+        <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><path d="M10 12V3m0 9l-3.4-3.4M10 12l3.4-3.4M4 16.5h12" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        导出全部
+      </button>
+      <p class="storage-note">数据保存在本机 data/ 目录<br>拖入 JSON 文件即可导入</p>
+    </div>
+  </aside>
+  <div id="sidebarScrim" class="sidebar-scrim hidden"></div>
+
+  <main id="main" class="main">
+    <div id="filterChip" class="filter-chip hidden"></div>
+    <div id="viewRoot" class="view-root" aria-live="polite"></div>
+  </main>
+</div>
+
+<!-- 新建 / 编辑计划 -->
+<div id="planModal" class="modal-backdrop hidden">
+  <div class="modal plan-modal" role="dialog" aria-modal="true" aria-labelledby="planModalTitle">
+    <header class="modal-head">
+      <h3 id="planModalTitle">新建计划</h3>
+      <button class="icon-btn modal-close" aria-label="关闭">×</button>
+    </header>
+    <div class="plan-modal-body">
+      <section class="pm-left">
+        <label class="field-label" for="pmName">计划名称 <em>*</em></label>
+        <input id="pmName" class="text-input big" maxlength="80" placeholder="例如：晨跑 30 天" autocomplete="off">
+        <div class="field-error" id="pmNameErr"></div>
+
+        <label class="field-label">图标</label>
+        <div id="pmEmoji" class="emoji-grid"></div>
+
+        <label class="field-label">颜色</label>
+        <div id="pmColors" class="color-row"></div>
+
+        <label class="field-label">日期范围</label>
+        <div class="date-range">
+          <input type="date" id="pmStart" class="text-input" aria-label="开始日期">
+          <span class="range-arrow">→</span>
+          <input type="date" id="pmEnd" class="text-input" aria-label="结束日期">
+        </div>
+        <div class="range-chips">
+          <button type="button" data-days="7">7 天</button>
+          <button type="button" data-days="30">30 天</button>
+          <button type="button" data-days="90">90 天</button>
+        </div>
+        <div class="field-error" id="pmDateErr"></div>
+
+        <label class="field-label" for="pmDesc">备注（可选）</label>
+        <textarea id="pmDesc" class="text-input" rows="2" maxlength="500" placeholder="这个计划想达成什么？"></textarea>
+      </section>
+
+      <section class="pm-right">
+        <div class="pm-tabs" role="tablist">
+          <button data-tab="rows" class="active" role="tab">逐条添加</button>
+          <button data-tab="paste" role="tab">批量粘贴</button>
+          <button data-tab="repeat" role="tab">每周重复</button>
+        </div>
+
+        <div id="pmTabRows" class="pm-tab">
+          <div id="pmTaskRows" class="pm-task-rows"></div>
+          <button id="pmAddRow" class="ghost-btn small" type="button">＋ 添加一行</button>
+        </div>
+
+        <div id="pmTabPaste" class="pm-tab hidden">
+          <p class="hint">每行一个任务。用「2026-11-20 任务标题」可指定日期；不写日期则落在计划开始日。</p>
+          <textarea id="pmPaste" class="text-input mono" rows="7" placeholder="2026-11-15 完成第一章精读&#10;2026-11-18 整理错题本&#10;背单词 30 分钟"></textarea>
+          <div class="tab-action-row">
+            <span id="pmPasteCount" class="mini-count"></span>
+            <button id="pmPasteAdd" class="primary-btn small" type="button">解析并添加</button>
+          </div>
+        </div>
+
+        <div id="pmTabRepeat" class="pm-tab hidden">
+          <input id="pmRepeatTitle" class="text-input" maxlength="200" placeholder="任务标题，例如：背单词 30 分钟" autocomplete="off">
+          <div id="pmWeekdays" class="weekday-chips">
+            <button type="button" data-wd="0">一</button><button type="button" data-wd="1">二</button><button type="button" data-wd="2">三</button><button type="button" data-wd="3">四</button><button type="button" data-wd="4">五</button><button type="button" data-wd="5" class="weekend">六</button><button type="button" data-wd="6" class="weekend">日</button>
+          </div>
+          <p class="hint">在上方日期范围内，按选中的星期自动生成任务。</p>
+          <div class="tab-action-row">
+            <span id="pmRepeatCount" class="mini-count"></span>
+            <button id="pmRepeatAdd" class="primary-btn small" type="button">生成并添加</button>
+          </div>
+        </div>
+
+        <div class="pm-tasklist-head">任务预览 <span id="pmTaskCount" class="mini-count"></span></div>
+        <div id="pmTaskPreview" class="pm-task-preview"></div>
+      </section>
+    </div>
+    <footer class="modal-foot">
+      <span id="pmSummary" class="pm-summary"></span>
+      <div class="modal-foot-btns">
+        <button class="ghost-btn modal-close" type="button">取消</button>
+        <button id="pmSubmit" class="primary-btn" type="button">创建计划</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- 编辑任务 -->
+<div id="taskModal" class="modal-backdrop hidden">
+  <div class="modal task-modal" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle">
+    <header class="modal-head">
+      <h3 id="taskModalTitle">编辑任务</h3>
+      <button class="icon-btn modal-close" aria-label="关闭">×</button>
+    </header>
+    <div class="task-modal-body">
+      <label class="field-label" for="tmTitle">标题 <em>*</em></label>
+      <input id="tmTitle" class="text-input" maxlength="200" autocomplete="off">
+      <div class="field-error" id="tmTitleErr"></div>
+      <div class="task-modal-grid">
+        <div>
+          <label class="field-label" for="tmDate">日期</label>
+          <input type="date" id="tmDate" class="text-input">
+        </div>
+        <div>
+          <label class="field-label" for="tmPlan">所属计划</label>
+          <select id="tmPlan" class="text-input"></select>
+        </div>
+      </div>
+      <label class="field-label" for="tmNote">备注</label>
+      <input id="tmNote" class="text-input" maxlength="300" autocomplete="off">
+    </div>
+    <footer class="modal-foot">
+      <button id="tmDelete" class="danger-btn" type="button">删除任务</button>
+      <div class="modal-foot-btns">
+        <button class="ghost-btn modal-close" type="button">取消</button>
+        <button id="tmSave" class="primary-btn" type="button">保存</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- 导入预览 -->
+<div id="importModal" class="modal-backdrop hidden">
+  <div class="modal import-modal" role="dialog" aria-modal="true" aria-labelledby="importModalTitle">
+    <header class="modal-head">
+      <h3 id="importModalTitle">导入计划</h3>
+      <button class="icon-btn modal-close" aria-label="关闭">×</button>
+    </header>
+    <div id="importPreview" class="import-preview"></div>
+    <footer class="modal-foot">
+      <span class="pm-summary">导入后可在界面上继续编辑</span>
+      <div class="modal-foot-btns">
+        <button class="ghost-btn modal-close" type="button">取消</button>
+        <button id="importConfirm" class="primary-btn" type="button">导入</button>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- 计划详情抽屉 -->
+<div id="drawerScrim" class="drawer-scrim hidden"></div>
+<aside id="drawer" class="drawer" aria-label="计划详情">
+  <div id="drawerContent"></div>
+</aside>
+
+<!-- 快速添加任务气泡 -->
+<div id="quickAdd" class="quick-add hidden">
+  <div class="qa-date" id="qaDate"></div>
+  <input id="qaTitle" class="text-input" maxlength="200" placeholder="任务标题，回车添加" autocomplete="off">
+  <div class="qa-row">
+    <select id="qaPlan" class="text-input" aria-label="选择计划"></select>
+    <button id="qaSubmit" class="primary-btn small" type="button">添加</button>
+  </div>
+</div>
+
+<div id="dropOverlay" class="drop-overlay hidden">
+  <div class="drop-card">
+    <svg viewBox="0 0 48 48" width="52" height="52" aria-hidden="true"><rect x="6" y="6" width="36" height="36" rx="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-dasharray="7 5"/><path d="M24 16v14m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <p>松开以导入计划文件</p>
+    <span>支持原生格式 / 原版 checkbox_use.json / 任务数组</span>
+  </div>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<input type="file" id="fileInput" accept=".json,application/json" multiple hidden>
+<script src="app.js"></script>
+</body>
+</html>
