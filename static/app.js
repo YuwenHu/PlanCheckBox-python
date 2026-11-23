@@ -1104,6 +1104,14 @@ function navigate(dir) {
   renderView();
 }
 
+/* ================= 对外钩子（供 chat.js 使用） ================= */
+window.PCB = {
+  get plans() { return S.plans; },
+  get today() { return S.today; },
+  api, toast,
+  refresh: async () => { await reloadState(); renderAll(); },
+};
+
 /* ================= 启动 ================= */
 (async function init() {
   loadPrefs();

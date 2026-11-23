@@ -25,6 +25,7 @@ from urllib.parse import urlparse, unquote
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 DATA_DIR = os.path.join(BASE_DIR, "data")
+CHAT_DIR = os.path.join(DATA_DIR, "chat")
 
 COLORS = ["pine", "amber", "coral", "blue", "mint", "magenta", "lavender", "teal"]
 EMOJIS = ["🎯", "🏃", "📚", "", "✍️", "🧠", "🎨", "", "🗣️", "💻", "", "🍳"]
@@ -229,6 +230,51 @@ def find_plan(plans, pid):
     return None
 
 
+# ---------------------------------------------------------------- 聊天会话存储
+# 会话消息存在本机 data/chat/；API Key 只保存在浏览器 localStorage，不经过本服务。
+
+def clean_message(m):
+    if not isinstance(m, dict):
+        return None
+    role = m.get("role")
+    if role not in ("user", "assistant"):
+        return None
+    text = m.get("text")
+    if not isinstance(text, str):
+        return None
+    return {
+        "id": clean_str(m.get("id"), 60) or new_id("m"),
+        "role": role,
+        "text": text[:32000],
+        "thinking": clean_str(m.get("thinking"), 32000) if isinstance(m.get("thinking"), str) else "",
+        "status": m.get("status") if m.get("status") in ("done", "stopped", "error") else "done",
+        "error": clean_str(m.get("error"), 500),
+        "createdAt": clean_str(m.get("createdAt"), 40) or datetime.now().isoformat(timespec="seconds"),
+    }
+
+
+def load_chat_sessions():
+    sessions = []
+    if os.path.isdir(CHAT_DIR):
+        for fn in os.listdir(CHAT_DIR):
+            if not fn.endswith(".json"):
+                continue
+            try:
+                with open(os.path.join(CHAT_DIR, fn), encoding="utf-8") as f:
+                    s = json.load(f)
+                if isinstance(s, dict) and s.get("id"):
+                    sessions.append(s)
+            except (json.JSONDecodeError, OSError):
+                continue
+    sessions.sort(key=lambda s: s.get("updatedAt", ""), reverse=True)
+    return sessions
+
+
+def save_chat_session(s):
+    os.makedirs(CHAT_DIR, exist_ok=True)
+    atomic_write(os.path.join(CHAT_DIR, s["id"] + ".json"), s)
+
+
 # ---------------------------------------------------------------- 首次启动示例数据
 
 def seed_if_empty():
@@ -365,6 +411,10 @@ class Handler(BaseHTTPRequestHandler):
                 plans = load_plans()
             return self.send_json({"plans": plans, "today": today_str(),
                                    "colors": COLORS, "emojis": EMOJIS})
+        if path == "/api/chat/sessions":
+            with _lock:
+                sessions = load_chat_sessions()
+            return self.send_json({"sessions": sessions})
         if path == "/api/export":
             with _lock:
                 plans = load_plans()
@@ -441,6 +491,20 @@ class Handler(BaseHTTPRequestHandler):
         if body is None:
             return self.send_err("请求体不是合法 JSON")
         with _lock:
+            m = re.match(r"^/api/chat/sessions/([\w-]+)$", path)
+            if m:
+                sid = m.group(1)
+                messages = [clean_message(x) for x in (body.get("messages") or [])[:400]]
+                messages = [x for x in messages if x]
+                session = {
+                    "id": sid,
+                    "title": clean_str(body.get("title"), 80) or "新对话",
+                    "createdAt": clean_str(body.get("createdAt"), 40) or datetime.now().isoformat(timespec="seconds"),
+                    "updatedAt": datetime.now().isoformat(timespec="seconds"),
+                    "messages": messages,
+                }
+                save_chat_session(session)
+                return self.send_json(session)
             plans = load_plans()
             m = re.match(r"^/api/plans/([\w-]+)$", path)
             if m:
@@ -476,6 +540,12 @@ class Handler(BaseHTTPRequestHandler):
     def do_DELETE(self):
         path = urlparse(self.path).path
         with _lock:
+            m = re.match(r"^/api/chat/sessions/([\w-]+)$", path)
+            if m:
+                fp = os.path.join(CHAT_DIR, m.group(1) + ".json")
+                if os.path.exists(fp):
+                    os.remove(fp)
+                return self.send_json({"ok": True})
             plans = load_plans()
             m = re.match(r"^/api/plans/([\w-]+)$", path)
             if m:

@@ -56,6 +56,19 @@ python3 app.py --port 9000 --no-browser   # 自定义端口 / 不自动打开浏
   3. 简易任务数组 `[{"title": "...", "date": "2026-11-20", "done": false}]`
 - 单个计划或全部计划可导出为 JSON，随时备份迁移
 
+### AI 助手（LLM 聊天）
+
+顶栏「AI 助手」打开右侧聊天面板（移动端全屏）。实现方法参考 [deepseek-ai/chat-demo](https://github.com/deepseek-ai/chat-demo)：
+
+- **浏览器直连 API**：默认 `https://api.deepseek.com`，走 Anthropic 兼容的 Messages 接口（`/anthropic/v1/messages`，SSE 流式）；API 地址、模型（deepseek-flash / deepseek-v4-pro）可在设置中修改
+- **Key 只存本浏览器**：保存在 localStorage，不经过本应用服务器；设置里可一键验证（GET /models，不产生费用）
+- **计划感知**：助手自动了解你的全部计划、进度与今日任务，可以回答「我今天该做什么」「复盘这周进度」
+- **AI 提案一键建计划**：让 AI 制定计划时，回复中会出现计划提案卡片，点「创建此计划」直接入库
+- **完整聊天体验**：流式回复 + 停止生成、重新生成、错误重试、深度思考（可开关，思考过程可折叠查看）、Markdown / 代码块 / 表格渲染与复制
+- **多会话**：新建 / 切换 / 重命名 / 删除（可撤销），自动标题；会话历史保存在本机 `data/chat/` 目录，刷新与重启不丢
+
+> 隐私说明：发送对话时，消息内容会直接提交给你配置的 API 服务；本应用服务器只保存会话历史，不接触 API Key。
+
 ### 快捷键
 
 | 键 | 作用 |
@@ -80,10 +93,14 @@ app.py                  # 本地服务 + REST API（Python 标准库）
 static/
   index.html            # 页面结构
   app.css               # 视觉系统（纸感配色 / 动效 / 响应式）
-  app.js                # 交互逻辑（原生 JS，零依赖）
+  app.js                # 计划交互逻辑（原生 JS，零依赖）
+  chat.css              # AI 助手面板样式
+  chat.js               # AI 助手：SSE 流式客户端 / Markdown / 会话管理
 samples/                # 两种格式的导入示例
-tests/test_ui.py        # 端到端界面测试（Playwright + 系统 Chrome）
-data/                   # 运行时生成（已 gitignore）
+tests/test_ui.py        # 计划功能端到端测试（Playwright + 系统 Chrome）
+tests/test_chat.py      # AI 助手端到端测试
+tests/mock_llm.py       # 模拟 DeepSeek 兼容 API（测试用）
+data/                   # 运行时生成（已 gitignore）：计划 + data/chat/ 会话
 ```
 
 ## API 简表
@@ -98,12 +115,15 @@ data/                   # 运行时生成（已 gitignore）
 | POST | `/api/import` | 导入，`{"payload": ..., "dryRun": true}` 可预览 |
 | POST | `/api/reorder` | 计划排序 |
 | GET | `/api/export[/<id>]` | 导出全部 / 单个计划 |
+| GET | `/api/chat/sessions` | 聊天会话列表 |
+| PUT / DELETE | `/api/chat/sessions/<id>` | 保存 / 删除会话 |
 
 ## 测试
 
 ```bash
 pip install playwright   # 仅测试需要；运行应用本身零依赖
-python3 tests/test_ui.py
+python3 tests/test_ui.py     # 计划功能 13 项
+python3 tests/test_chat.py   # AI 助手 10 项（自带模拟 LLM 服务，不产生 API 费用）
 ```
 
-测试使用系统已安装的 Chrome，覆盖：创建计划（三种录入方式）、勾选持久化、三视图切换、快速添加、编辑、删除撤销、搜索、导入、移动端布局。
+测试使用系统已安装的 Chrome。计划测试覆盖：创建计划（三种录入方式）、勾选持久化、三视图切换、快速添加、编辑、删除撤销、搜索、导入、移动端布局；AI 测试覆盖：Key 验证、流式回复与 Markdown、计划提案一键创建、停止生成、重新生成、错误重试、深度思考、多会话持久化、移动端。
