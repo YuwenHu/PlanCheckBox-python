@@ -1,9 +1,11 @@
 /* PlanCheckBox · AI 助手
-   实现方法参考 deepseek-ai/chat-demo：
-   - 浏览器直连配置的 API 服务（Anthropic 兼容 Messages API，stream: true）
-   - API Key 仅存浏览器 localStorage，不经过本应用服务器
-   - SSE 解析按 WHATWG 规范（字段累积 / 空行派发 / 注释忽略 / 跨分片多字节安全）
-   - 错误分类：http / stream / network / interrupted / protocol
+   实现方法参考 deepseek-ai/chat-demo（浏览器直连 API、SSE 流式、Key 仅存浏览器），
+   并扩展为兼容两类服务：
+   - OpenAI 兼容 Chat Completions（默认；api.deepseek.com 及各类网关）
+   - Anthropic 兼容 Messages（DeepSeek 官方 /anthropic 路径，chat-demo 同款协议）
+   SSE 解析按 WHATWG 规范实现（字段累积 / 空行派发 / 注释忽略 / 跨分片多字节安全）。
+   错误分类：http / stream / network / interrupted / protocol。
+   若网关不允许浏览器跨域，自动降级为经本机 app.py 转发（Key 仅透传不保存）。
    会话历史持久化到本应用 data/chat/ 目录（Key 除外）。 */
 'use strict';
 
@@ -11,16 +13,21 @@
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
   const SETTINGS_KEY = 'plancheckbox-chat-settings';
-  const DEFAULTS = { key: '', origin: 'https://api.deepseek.com', model: 'deepseek-flash', thinking: false };
+  const PROXY_HOSTS_KEY = 'plancheckbox-chat-proxy-hosts';
+  const DEFAULTS = {
+    key: '', origin: 'https://api.deepseek.com', model: 'deepseek-chat',
+    thinking: false, protocol: 'openai', transport: 'auto',
+  };
 
   let settings = loadSettings();
-  let sessions = [];          // 服务端会话（含当前）
-  let current = null;         // 当前会话对象
+  let proxyHosts = loadProxyHosts();
+  let sessions = [];
+  let current = null;
   let generating = false;
   let abortCtrl = null;
   let saveTimer = null;
   let stickBottom = true;
-  const createdProposals = {}; // msgId -> {blockIdx: planName}
+  const createdProposals = {};
 
   function loadSettings() {
     try { return Object.assign({}, DEFAULTS, JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')); }
@@ -28,6 +35,14 @@
   }
   function persistSettings() {
     try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (_) {}
+  }
+  function loadProxyHosts() {
+    try { return new Set(JSON.parse(localStorage.getItem(PROXY_HOSTS_KEY) || '[]')); }
+    catch (_) { return new Set(); }
+  }
+  function markProxyHost(base) {
+    proxyHosts.add(base);
+    try { localStorage.setItem(PROXY_HOSTS_KEY, JSON.stringify(Array.from(proxyHosts))); } catch (_) {}
   }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
@@ -40,7 +55,31 @@
   function nowISO() { return new Date().toISOString(); }
   function PCB() { return window.PCB; }
 
-  /* ================= SSE 解析（移植自 chat-demo sse.ts） ================= */
+  /* ================= URL 构造 ================= */
+  /** 规范化基础地址：去尾斜杠与常见误粘的路径后缀，保留用户写的 /v1 */
+  function baseOf(origin) {
+    let o = String(origin || DEFAULTS.origin).trim().replace(/\s+/g, '');
+    if (!o) o = DEFAULTS.origin;
+    o = o.replace(/\/+$/, '');
+    o = o.replace(/\/(chat\/completions|completions|messages|models)$/i, '');
+    return o;
+  }
+  function chatURL(cfg) {
+    const b = baseOf(cfg.origin);
+    if (cfg.protocol === 'anthropic') {
+      if (/\/anthropic(\/v1)?$/.test(b)) return b.replace(/\/$/, '') + (/\/v1$/.test(b) ? '/messages' : '/v1/messages');
+      if (/\/v1$/.test(b)) return b.slice(0, -3) + '/anthropic/v1/messages';
+      return b + '/anthropic/v1/messages';
+    }
+    return b + '/chat/completions';
+  }
+  function modelsURL(cfg) { return baseOf(cfg.origin) + '/models'; }
+  function chatHeaders(cfg) {
+    if (cfg.protocol === 'anthropic') return { 'x-api-key': cfg.key, 'Content-Type': 'application/json', Accept: 'text/event-stream' };
+    return { Authorization: 'Bearer ' + cfg.key, 'Content-Type': 'application/json', Accept: 'text/event-stream' };
+  }
+
+  /* ================= SSE 解析（WHATWG 规范，移植自 chat-demo） ================= */
   const LINE_BREAK = /\r\n|\r|\n/g;
   class SSEDecoder {
     constructor() { this.buffer = ''; this.data = ''; this.hasData = false; this.eventType = ''; }
@@ -50,7 +89,7 @@
       let lineStart = 0;
       LINE_BREAK.lastIndex = 0;
       for (let m = LINE_BREAK.exec(this.buffer); m; m = LINE_BREAK.exec(this.buffer)) {
-        if (m[0] === '\r' && LINE_BREAK.lastIndex === this.buffer.length) break; // CR 可能是 CRLF 前半
+        if (m[0] === '\r' && LINE_BREAK.lastIndex === this.buffer.length) break;
         const ev = this.processLine(this.buffer.slice(lineStart, m.index));
         if (ev) events.push(ev);
         lineStart = LINE_BREAK.lastIndex;
@@ -65,7 +104,7 @@
     }
     processLine(line) {
       if (line === '') return this.dispatch();
-      if (line.startsWith(':')) return null; // 保活注释
+      if (line.startsWith(':')) return null;
       const colon = line.indexOf(':');
       const field = colon === -1 ? line : line.slice(0, colon);
       let value = colon === -1 ? '' : line.slice(colon + 1);
@@ -106,7 +145,7 @@
     }
   }
 
-  /* ================= API 客户端 ================= */
+  /* ================= 传输层：直连 / 本机代理 ================= */
   function chatErr(kind, message, status) {
     const e = new Error(message);
     e.kind = kind; e.status = status;
@@ -117,43 +156,124 @@
     let message = text || res.statusText;
     try {
       const body = JSON.parse(text);
-      if (body && body.error && typeof body.error.message === 'string') message = body.error.message;
+      const err = body && (body.error || body);
+      if (err && typeof err.message === 'string') message = err.message;
+      else if (err && err.error && typeof err.error.message === 'string') message = err.error.message;
     } catch (_) {}
-    return chatErr(kind, message, res.status);
-  }
-  function origin() { return (settings.origin || DEFAULTS.origin).replace(/\/+$/, ''); }
-
-  /** GET /models 校验 Key，不产生费用 */
-  async function verifyKey(key) {
-    let res;
-    try {
-      res = await fetch(origin() + '/models', { headers: { Authorization: 'Bearer ' + key } });
-    } catch (e) { throw chatErr('network', e.message); }
-    if (!res.ok) throw await readErrBody(res, 'http');
+    return chatErr(kind, message.slice(0, 300), res.status);
   }
 
-  /** POST /anthropic/v1/messages（stream:true），逐个产出流式事件 */
-  async function* streamMessage(body, signal) {
+  /** POST 聊天请求（直连或代理），返回 Response */
+  async function llmPost(cfg, url, headers, body, signal) {
+    const viaProxy = cfg.transport === 'proxy' ||
+      (cfg.transport === 'auto' && proxyHosts.has(baseOf(cfg.origin)));
+    if (!viaProxy) {
+      try {
+        return await fetch(url, {
+          method: 'POST', headers, body: JSON.stringify(body), signal,
+        });
+      } catch (e) {
+        if (signal && signal.aborted) throw e;
+        if (cfg.transport === 'auto') {
+          markProxyHost(baseOf(cfg.origin));
+          if (PCB().toast) PCB().toast('该服务不允许浏览器跨域，已自动切换为经本机代理');
+          return llmPost(cfg, url, headers, body, signal);
+        }
+        throw chatErr('network', '无法连接 API 服务（直连失败；可在设置把请求方式改为「自动」或「经本机代理」）');
+      }
+    }
     let res;
     try {
-      res = await fetch(origin() + '/anthropic/v1/messages', {
+      res = await fetch('/api/llm/stream', {
         method: 'POST',
-        headers: {
-          'x-api-key': settings.key,
-          'Content-Type': 'application/json',
-          Accept: 'text/event-stream',
-        },
-        body: JSON.stringify(Object.assign({}, body, { stream: true })),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, method: 'POST', headers, body }),
         signal,
       });
     } catch (e) {
       if (signal && signal.aborted) throw e;
       throw chatErr('network', e.message);
     }
+    return res;
+  }
+
+  /** GET（/models 等），同样支持代理 */
+  async function llmGet(cfg, url, headers, signal) {
+    const viaProxy = cfg.transport === 'proxy' ||
+      (cfg.transport === 'auto' && proxyHosts.has(baseOf(cfg.origin)));
+    if (!viaProxy) {
+      try {
+        return await fetch(url, { headers, signal });
+      } catch (e) {
+        if (signal && signal.aborted) throw e;
+        if (cfg.transport === 'auto') {
+          markProxyHost(baseOf(cfg.origin));
+          return llmGet(cfg, url, headers, signal);
+        }
+        throw chatErr('network', '无法连接 API 服务（' + e.message + '）');
+      }
+    }
+    let res;
+    try {
+      res = await fetch('/api/llm/stream', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, method: 'GET', headers, body: {} }),
+        signal,
+      });
+    } catch (e) {
+      if (signal && signal.aborted) throw e;
+      throw chatErr('network', e.message);
+    }
+    return res;
+  }
+
+  /** GET /models 校验 Key（不产生费用） */
+  async function verifyKey(cfg) {
+    const res = await llmGet(cfg, modelsURL(cfg), { Authorization: 'Bearer ' + cfg.key });
+    if (!res.ok) throw await readErrBody(res, 'http');
+    return res.json();
+  }
+
+  async function fetchModels(cfg) {
+    const data = await verifyKey(cfg);
+    const list = (data && Array.isArray(data.data) ? data.data : []).map(m => m && m.id).filter(Boolean);
+    if (!list.length) throw chatErr('protocol', '该服务返回的模型列表为空，请手动填写模型 ID');
+    return list;
+  }
+
+  /**
+   * 发起聊天并按统一回调消费流。
+   * handlers: { onText(str), onThinking(str), signal }
+   * 返回 { stopReason }；错误抛 chatErr。
+   */
+  async function streamChat(cfg, reqBody, handlers) {
+    const res = await llmPost(cfg, chatURL(cfg), chatHeaders(cfg), reqBody, handlers.signal);
     if (!res.ok) throw await readErrBody(res, 'http');
     const ct = res.headers.get('Content-Type') || '';
-    if (!res.body || !ct.includes('text/event-stream')) throw await readErrBody(res, 'protocol');
-    for await (const { event, data } of readSSE(res.body, signal)) {
+
+    if (cfg.protocol === 'openai' && ct.includes('application/json')) {
+      // 部分网关忽略 stream:true，直接返回完整 JSON —— 兼容处理
+      const j = await res.json().catch(() => null);
+      const choice = j && j.choices && j.choices[0];
+      if (!choice) throw chatErr('protocol', '服务返回了无法解析的响应');
+      if (choice.message && choice.message.reasoning_content) handlers.onThinking(choice.message.reasoning_content);
+      if (choice.message && choice.message.content) handlers.onText(choice.message.content);
+      return { stopReason: choice.finish_reason || 'end_turn' };
+    }
+    if (!res.body || !ct.includes('text/event-stream')) {
+      throw await readErrBody(res, 'protocol');
+    }
+
+    if (cfg.protocol === 'anthropic') {
+      return streamAnthropic(res, handlers);
+    }
+    return streamOpenAI(res, handlers);
+  }
+
+  /* Anthropic Messages SSE：content_block_start/delta/stop，message_delta(title)，message_stop */
+  async function streamAnthropic(res, handlers) {
+    for await (const { event, data } of readSSE(res.body, handlers.signal)) {
       let payload = null;
       try { payload = JSON.parse(data); } catch (_) { if (event !== 'error') continue; }
       if (payload && payload.error && typeof payload.error.message === 'string') {
@@ -161,18 +281,65 @@
       }
       if (event === 'error') throw chatErr('stream', data);
       if (!payload || typeof payload.type !== 'string') continue;
-      yield payload;
-      if (payload.type === 'message_stop') return;
+      switch (payload.type) {
+        case 'content_block_delta':
+          if (payload.delta && payload.delta.type === 'text_delta') handlers.onText(payload.delta.text || '');
+          else if (payload.delta && payload.delta.type === 'thinking_delta') handlers.onThinking(payload.delta.thinking || '');
+          break;
+        case 'message_delta':
+          if (payload.delta && payload.delta.title) handlers.onTitle && handlers.onTitle(payload.delta.title);
+          return { stopReason: (payload.delta && payload.delta.stop_reason) || 'end_turn' };
+        case 'message_stop':
+          return { stopReason: 'end_turn' };
+        default:
+          break;
+      }
     }
     throw chatErr('interrupted', '回复在结束前中断');
   }
 
-  function friendlyError(e) {
-    if (e.kind === 'network') return '无法连接 API 服务，请检查网络或设置中的 API 地址';
-    if (e.kind === 'protocol') return 'API 返回了非流式响应，请确认地址兼容 Anthropic Messages 接口';
-    if (e.kind === 'http' && e.status === 401) return 'API Key 无效或已过期（401），请在设置中检查';
-    if (e.kind === 'http' && e.status === 402) return '账户余额不足（402）：' + e.message;
-    if (e.kind === 'http' && e.status === 429) return '请求过于频繁（429），稍后再试';
+  /* OpenAI Chat Completions SSE：data: {choices:[{delta:{content|reasoning_content}}]} … [DONE] */
+  async function streamOpenAI(res, handlers) {
+    let gotDone = false;
+    for await (const { data } of readSSE(res.body, handlers.signal)) {
+      const payload = data.trim();
+      if (!payload) continue;
+      if (payload === '[DONE]') { gotDone = true; break; }
+      let j = null;
+      try { j = JSON.parse(payload); } catch (_) { continue; }
+      if (j && j.error) {
+        const m = typeof j.error === 'string' ? j.error : (j.error.message || '上游错误');
+        throw chatErr('stream', m);
+      }
+      const choice = j && j.choices && j.choices[0];
+      if (!choice) continue;
+      const d = choice.delta || {};
+      if (d.reasoning_content) handlers.onThinking(d.reasoning_content);
+      if (d.content) handlers.onText(d.content);
+      if (choice.finish_reason) gotDone = true;
+    }
+    if (!gotDone) throw chatErr('interrupted', '回复在结束前中断');
+    return { stopReason: 'end_turn' };
+  }
+
+  function friendlyError(e, cfg) {
+    cfg = cfg || settings;
+    if (e.kind === 'network') return e.message || '无法连接 API 服务，请检查网络与 API 地址';
+    if (e.kind === 'protocol') return 'API 返回了无法识别的响应：' + e.message + '。请确认 API 地址与协议选择是否匹配';
+    if (e.kind === 'http') {
+      if (e.status === 401) return 'API Key 无效或已过期（401），请在设置中检查';
+      if (e.status === 402) return '账户余额不足（402）：' + e.message;
+      if (e.status === 403) return '403：' + e.message + '。若提示模型不可用，请在设置点「拉取模型列表」，选择该 Key 可用的模型';
+      if (e.status === 404) {
+        if (cfg.protocol === 'anthropic') {
+          return '404 Not Found：该地址没有 Anthropic 兼容端点。你的网关大概率是 OpenAI 兼容协议——请在设置把「API 协议」改为 OpenAI 兼容';
+        }
+        return '404 Not Found：API 地址或路径不对。填基础地址即可（如 https://网关域名/v1），应用会自动拼接 /chat/completions';
+      }
+      if (e.status === 429) return '请求过于频繁（429），稍后再试';
+      return '请求失败（HTTP ' + e.status + '）：' + e.message;
+    }
+    if (e.kind === 'interrupted') return e.message + '，可点重试';
     return e.message || '请求失败';
   }
 
@@ -260,7 +427,6 @@
   /* ================= 计划提案 ================= */
   const PLAN_FENCE = /```plan-json\s*\n([\s\S]*?)```/g;
   function splitProposals(text) {
-    // 返回 [{type:'md',text} | {type:'plan',json,raw,idx}]；未闭合的 plan-json 围栏按普通 md 处理
     const parts = [];
     let last = 0, idx = 0, m;
     PLAN_FENCE.lastIndex = 0;
@@ -367,7 +533,6 @@
     clearTimeout(saveTimer);
     if (!current || !current.messages.length) return;
     const s = current;
-    // 先同步更新本地列表，避免会话列表在网络往返前显示旧数据
     const i = sessions.findIndex(x => x.id === s.id);
     if (i >= 0) sessions[i] = s; else sessions.unshift(s);
     try {
@@ -515,8 +680,8 @@
     if (!settings.key) {
       box.innerHTML = '<div class="chat-setup-card">' +
         '<svg viewBox="0 0 48 48" width="44" height="44" style="color:var(--pine)"><path d="M24 6l4.2 10.8L39 21l-10.8 4.2L24 36l-4.2-10.8L9 21l10.8-4.2L24 6z" fill="currentColor"/></svg>' +
-        '<h4>先配置 API Key</h4><p>AI 助手直连 DeepSeek 兼容 API 服务。<br>Key 只保存在本浏览器，不会上传到本应用服务器。</p>' +
-        '<button class="primary-btn" id="chatSetupBtn" type="button">配置 API Key</button></div>';
+        '<h4>先配置 API 连接</h4><p>支持 DeepSeek 官方 API，或任意 OpenAI/Anthropic 兼容服务与网关。<br>Key 只保存在本浏览器，不会上传到本应用服务器。</p>' +
+        '<button class="primary-btn" id="chatSetupBtn" type="button">配置 API 连接</button></div>';
       $('#chatSetupBtn').addEventListener('click', openSettings);
       return;
     }
@@ -550,27 +715,40 @@
     $('#chatStatus').classList.toggle('hidden', !on);
     if (on) $('#chatStatus').innerHTML = '<span class="th-spin"></span>正在生成回复…可随时停止';
   }
-  function buildRequest() {
+  function historyForAPI() {
     const msgs = [];
     current.messages.forEach(m => {
       if (m.status === 'streaming') return;
-      if (m.role === 'user') msgs.push({ role: 'user', content: m.text });
-      else if (m.text && (m.status === 'done' || m.status === 'stopped')) {
-        msgs.push({ role: 'assistant', content: [{ type: 'text', text: m.text }] });
-      }
+      if (m.role === 'user') msgs.push(m);
+      else if (m.text && (m.status === 'done' || m.status === 'stopped')) msgs.push(m);
     });
-    return {
-      model: settings.model || DEFAULTS.model,
-      system: systemPrompt(),
-      messages: msgs,
-      thinking: { type: settings.thinking ? 'enabled' : 'disabled' },
-      tools: [],
-      title: { enabled: true },
-    };
+    return msgs;
+  }
+  function buildRequest(cfg) {
+    const hist = historyForAPI();
+    if (cfg.protocol === 'anthropic') {
+      return {
+        model: cfg.model || DEFAULTS.model,
+        system: systemPrompt(),
+        messages: hist.map(m => m.role === 'user'
+          ? { role: 'user', content: m.text }
+          : { role: 'assistant', content: [{ type: 'text', text: m.text }] }),
+        thinking: { type: cfg.thinking ? 'enabled' : 'disabled' },
+        tools: [],
+        title: { enabled: true },
+      };
+    }
+    const messages = [{ role: 'system', content: systemPrompt() }];
+    hist.forEach(m => messages.push({ role: m.role, content: m.text }));
+    const body = { model: cfg.model || DEFAULTS.model, messages, stream: true };
+    if (cfg.thinking) body.thinking = { type: 'enabled' };
+    return body;
   }
   function stopGeneration() { if (abortCtrl) abortCtrl.abort(); }
 
   async function generate() {
+    const cfg = Object.assign({}, settings);
+    if (!cfg.model) { openSettings(); PCB().toast('请先在设置中填写模型 ID'); return; }
     const msg = { id: uid('m'), role: 'assistant', text: '', thinking: '', status: 'streaming', error: '', createdAt: nowISO() };
     current.messages.push(msg);
     const box = $('#chatMessages');
@@ -579,7 +757,6 @@
     scrollBottom(true);
     setGenerating(true);
     abortCtrl = new AbortController();
-    const blocks = {};
     let raf = 0;
     const scheduleRender = () => {
       if (raf) return;
@@ -590,36 +767,24 @@
       });
     };
     try {
-      for await (const ev of streamMessage(buildRequest(), abortCtrl.signal)) {
-        if (ev.type === 'content_block_start' && ev.content_block) {
-          blocks[ev.index] = {
-            type: ev.content_block.type,
-            text: ev.content_block.text || ev.content_block.thinking || '',
-          };
-        } else if (ev.type === 'content_block_delta' && ev.delta) {
-          const b = blocks[ev.index];
-          if (!b) continue;
-          if (ev.delta.type === 'text_delta' && b.type === 'text') b.text += ev.delta.text || '';
-          else if (ev.delta.type === 'thinking_delta' && b.type === 'thinking') b.text += ev.delta.thinking || '';
-          msg.text = Object.keys(blocks).sort((a, b2) => a - b2)
-            .filter(k => blocks[k].type === 'text').map(k => blocks[k].text).join('');
-          msg.thinking = Object.keys(blocks).sort((a, b2) => a - b2)
-            .filter(k => blocks[k].type === 'thinking').map(k => blocks[k].text).join('');
-          scheduleRender();
-        } else if (ev.type === 'message_delta' && ev.delta && ev.delta.title) {
+      await streamChat(cfg, buildRequest(cfg), {
+        signal: abortCtrl.signal,
+        onText: t => { msg.text += t; scheduleRender(); },
+        onThinking: t => { msg.thinking += t; scheduleRender(); },
+        onTitle: title => {
           if (current.title === '新对话' || !current.title) {
-            current.title = String(ev.delta.title).slice(0, 40);
+            current.title = String(title).slice(0, 40);
             $('#chatTitle').textContent = current.title;
           }
-        }
-      }
+        },
+      });
       msg.status = 'done';
     } catch (e) {
       if (abortCtrl.signal.aborted) {
         msg.status = 'stopped';
       } else {
         msg.status = 'error';
-        msg.error = friendlyError(e);
+        msg.error = friendlyError(e, cfg);
       }
     }
     if (raf) cancelAnimationFrame(raf);
@@ -680,14 +845,58 @@
     $('#chatScrim').classList.add('hidden');
     hideSessionList();
   }
+  function formCfg() {
+    return {
+      key: $('#csKey').value.trim(),
+      origin: $('#csOrigin').value.trim() || DEFAULTS.origin,
+      model: $('#csModel').value.trim(),
+      protocol: $('#csProto').value,
+      transport: $('#csTransport').value,
+      thinking: $('#csThinking').checked,
+    };
+  }
   function openSettings() {
-    $('#csKey').value = settings.key;
+    $('#csProto').value = settings.protocol || DEFAULTS.protocol;
     $('#csOrigin').value = settings.origin;
+    $('#csKey').value = settings.key;
     $('#csModel').value = settings.model;
+    $('#csTransport').value = settings.transport || DEFAULTS.transport;
     $('#csThinking').checked = !!settings.thinking;
     $('#csKeyErr').textContent = '';
+    $('#csModelList').innerHTML = '';
     $('#chatSettingsModal').classList.remove('hidden');
     setTimeout(() => $('#csKey').focus(), 60);
+  }
+  async function doVerify() {
+    const cfg = formCfg();
+    if (!cfg.key) { $('#csKeyErr').textContent = '请先填写 API Key'; return; }
+    const btn = $('#csVerify');
+    btn.disabled = true; btn.textContent = '验证中…';
+    try {
+      await verifyKey(cfg);
+      $('#csKeyErr').textContent = '';
+      PCB().toast('连接验证通过 ✓');
+    } catch (e) {
+      $('#csKeyErr').textContent = friendlyError(e, cfg);
+    }
+    btn.disabled = false; btn.textContent = '验证';
+  }
+  async function doFetchModels() {
+    const cfg = formCfg();
+    if (!cfg.key) { $('#csKeyErr').textContent = '请先填写 API Key'; return; }
+    const btn = $('#csFetchModels');
+    btn.disabled = true; btn.textContent = '拉取中…';
+    try {
+      const list = await fetchModels(cfg);
+      $('#csModelList').innerHTML = list.map(id => '<option value="' + esc(id) + '"></option>').join('');
+      if (!$('#csModel').value || !list.includes($('#csModel').value)) {
+        $('#csModel').value = list.includes(cfg.model) ? cfg.model : list[0];
+      }
+      PCB().toast('获取到 ' + list.length + ' 个可用模型');
+    } catch (e) {
+      PCB().toast('拉取失败：' + friendlyError(e, formCfg()));
+    }
+    btn.disabled = false; btn.textContent = '拉取模型列表';
   }
 
   /* ================= 事件绑定 ================= */
@@ -724,30 +933,10 @@
       inp.type = show ? 'text' : 'password';
       $('#csKeyShow').textContent = show ? '隐藏' : '显示';
     });
-    $('#csVerify').addEventListener('click', async () => {
-      const key = $('#csKey').value.trim();
-      const originVal = $('#csOrigin').value.trim();
-      if (!key) { $('#csKeyErr').textContent = '请先填写 API Key'; return; }
-      const old = { key: settings.key, origin: settings.origin };
-      settings.key = key;
-      if (originVal) settings.origin = originVal;
-      const btn = $('#csVerify');
-      btn.disabled = true; btn.textContent = '验证中…';
-      try {
-        await verifyKey(key);
-        $('#csKeyErr').textContent = '';
-        PCB().toast('API Key 验证通过 ✓');
-      } catch (e) {
-        $('#csKeyErr').textContent = '验证失败：' + friendlyError(e);
-      }
-      settings.key = old.key; settings.origin = old.origin;
-      btn.disabled = false; btn.textContent = '验证';
-    });
+    $('#csVerify').addEventListener('click', doVerify);
+    $('#csFetchModels').addEventListener('click', doFetchModels);
     $('#csSave').addEventListener('click', () => {
-      settings.key = $('#csKey').value.trim();
-      settings.origin = $('#csOrigin').value.trim() || DEFAULTS.origin;
-      settings.model = $('#csModel').value;
-      settings.thinking = $('#csThinking').checked;
+      settings = Object.assign({}, DEFAULTS, formCfg());
       persistSettings();
       $('#chatSettingsModal').classList.add('hidden');
       renderMessages();

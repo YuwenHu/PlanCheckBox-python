@@ -1,6 +1,6 @@
 # PlanCheckBox-python
 
-丢入任务文件，就能看到对应的月度、周度、每日的安排；也可以**直接在界面上创建自己的计划**——点按钮、填表单、勾选完成，不需要手写任何文件。
+丢入任务文件，就能看到对应的月度、周度、每日的安排；也可以**直接在界面上创建自己的计划**——点按钮、填表单、勾选完成，不需要手写任何文件。内置 **AI 计划助手**，支持 DeepSeek 官方 API 与任意 OpenAI/Anthropic 兼容网关。
 
 零第三方依赖，Python 3.8+ 一条命令启动。
 
@@ -58,16 +58,42 @@ python3 app.py --port 9000 --no-browser   # 自定义端口 / 不自动打开浏
 
 ### AI 助手（LLM 聊天）
 
-顶栏「AI 助手」打开右侧聊天面板（移动端全屏）。实现方法参考 [deepseek-ai/chat-demo](https://github.com/deepseek-ai/chat-demo)：
+顶栏「AI 助手」打开右侧聊天面板（移动端全屏）。实现方法参考 [deepseek-ai/chat-demo](https://github.com/deepseek-ai/chat-demo)：浏览器直连所配置的 API 服务，SSE 流式输出；**API Key 只保存在本浏览器 localStorage，不经过本应用服务器**。
 
-- **浏览器直连 API**：默认 `https://api.deepseek.com`，走 Anthropic 兼容的 Messages 接口（`/anthropic/v1/messages`，SSE 流式）；API 地址、模型（deepseek-flash / deepseek-v4-pro）可在设置中修改
-- **Key 只存本浏览器**：保存在 localStorage，不经过本应用服务器；设置里可一键验证（GET /models，不产生费用）
-- **计划感知**：助手自动了解你的全部计划、进度与今日任务，可以回答「我今天该做什么」「复盘这周进度」
-- **AI 提案一键建计划**：让 AI 制定计划时，回复中会出现计划提案卡片，点「创建此计划」直接入库
-- **完整聊天体验**：流式回复 + 停止生成、重新生成、错误重试、深度思考（可开关，思考过程可折叠查看）、Markdown / 代码块 / 表格渲染与复制
-- **多会话**：新建 / 切换 / 重命名 / 删除（可撤销），自动标题；会话历史保存在本机 `data/chat/` 目录，刷新与重启不丢
+能力：流式回复与停止生成、重新生成、错误提示与重试、深度思考（可开关，过程可折叠查看）、Markdown / 代码块 / 表格渲染与复制、多会话（自动标题 / 重命名 / 删除撤销，历史持久化在 `data/chat/`）。
 
-> 隐私说明：发送对话时，消息内容会直接提交给你配置的 API 服务；本应用服务器只保存会话历史，不接触 API Key。
+**计划联动**：助手自动携带你的全部计划、进度与今日任务作为上下文；让它制定计划时，回复中会出现计划提案卡片，点「创建此计划」直接入库。
+
+#### 连接配置（官方 API 或第三方网关）
+
+设置弹窗里有四个关键项：
+
+| 配置 | 说明 |
+| --- | --- |
+| API 协议 | **OpenAI 兼容**（默认，适用绝大多数网关与 `api.deepseek.com`）或 **Anthropic 兼容**（chat-demo 同款的 `/anthropic/v1/messages`） |
+| API 地址 | 填服务基础地址即可，结尾有无 `/v1` 都能识别，应用按协议自动拼接路径 |
+| 模型 ID | 以你所用服务实际提供的为准；点 **「拉取模型列表」**（GET /models）可直接选择该 Key 可用的模型，也支持手动输入 |
+| 请求方式 | **自动**（默认）：浏览器直连失败（如网关不允许跨域）时自动改经本机 app.py 转发，Key 仅透传不保存；也可强制直连或强制代理 |
+
+配置示例：
+
+```text
+DeepSeek 官方：协议任选；地址 https://api.deepseek.com；
+             模型 deepseek-flash 或 deepseek-v4-pro（建议先拉取模型列表）
+第三方网关（OpenAI 兼容）：协议 OpenAI 兼容；地址 https://你的网关/v1；
+             模型点「拉取模型列表」选择
+```
+
+#### 排障速查
+
+| 现象 | 原因 | 处理 |
+| --- | --- | --- |
+| 聊天报 `HTTP 404 Not Found: Not Found` | 该地址没有 Anthropic 兼容端点（多数网关只实现 OpenAI 兼容），或把 `/v1` 粘进了 Anthropic 路径 | 设置里把「API 协议」改为 **OpenAI 兼容** |
+| `HTTP 403 ... model is not available ... or the model name is invalid` | 模型名不在该 Key 的可用清单里 | 点「拉取模型列表」，选一个实际可用的模型 ID |
+| `401` | Key 无效 / 过期 | 重新填 Key 并点「验证」 |
+| 配置看着都对但「无法连接 API 服务」 | 网关仅内网可达且不允许浏览器跨域（CORS） | 「请求方式」保持 **自动**，首次失败后会自动切换经本机代理；也可手动选「始终经本机服务代理」 |
+
+> 隐私说明：发送对话时，消息内容会直接或经本机服务转发给你配置的 API 服务；本应用服务器不保存 API Key，只保存会话历史于本机 `data/chat/`。
 
 ### 快捷键
 
@@ -82,7 +108,7 @@ python3 app.py --port 9000 --no-browser   # 自定义端口 / 不自动打开浏
 
 ## 数据存储
 
-- 所有数据保存在 `data/` 目录，**一个计划一个 JSON 文件**，写入为原子操作
+- 所有数据保存在 `data/` 目录，**一个计划一个 JSON 文件**，聊天会话在 `data/chat/`，写入为原子操作
 - 数据完全在本机，不上传任何内容；备份只需复制 `data/` 目录
 - 删除 `data/` 后重启会重新生成示例计划
 
@@ -95,11 +121,11 @@ static/
   app.css               # 视觉系统（纸感配色 / 动效 / 响应式）
   app.js                # 计划交互逻辑（原生 JS，零依赖）
   chat.css              # AI 助手面板样式
-  chat.js               # AI 助手：SSE 流式客户端 / Markdown / 会话管理
+  chat.js               # AI 助手：双协议流式客户端 / Markdown / 会话管理
 samples/                # 两种格式的导入示例
 tests/test_ui.py        # 计划功能端到端测试（Playwright + 系统 Chrome）
 tests/test_chat.py      # AI 助手端到端测试
-tests/mock_llm.py       # 模拟 DeepSeek 兼容 API（测试用）
+tests/mock_llm.py       # 模拟 LLM 网关（OpenAI + Anthropic 双协议，测试用）
 data/                   # 运行时生成（已 gitignore）：计划 + data/chat/ 会话
 ```
 
@@ -117,13 +143,14 @@ data/                   # 运行时生成（已 gitignore）：计划 + data/cha
 | GET | `/api/export[/<id>]` | 导出全部 / 单个计划 |
 | GET | `/api/chat/sessions` | 聊天会话列表 |
 | PUT / DELETE | `/api/chat/sessions/<id>` | 保存 / 删除会话 |
+| POST | `/api/llm/stream` | LLM 请求的本机转发通道（跨域受限时使用，不保存 Key） |
 
 ## 测试
 
 ```bash
 pip install playwright   # 仅测试需要；运行应用本身零依赖
 python3 tests/test_ui.py     # 计划功能 13 项
-python3 tests/test_chat.py   # AI 助手 10 项（自带模拟 LLM 服务，不产生 API 费用）
+python3 tests/test_chat.py   # AI 助手 12 项（自带模拟 LLM 网关，不产生 API 费用）
 ```
 
-测试使用系统已安装的 Chrome。计划测试覆盖：创建计划（三种录入方式）、勾选持久化、三视图切换、快速添加、编辑、删除撤销、搜索、导入、移动端布局；AI 测试覆盖：Key 验证、流式回复与 Markdown、计划提案一键创建、停止生成、重新生成、错误重试、深度思考、多会话持久化、移动端。
+测试使用系统已安装的 Chrome。计划测试覆盖：创建计划（三种录入方式）、勾选持久化、三视图切换、快速添加、编辑、删除撤销、搜索、导入、移动端布局；AI 测试覆盖：Key 验证、流式回复与 Markdown、计划提案一键创建、停止生成、重新生成、错误重试、深度思考、模型列表拉取、Anthropic 协议、带 /v1 的网关地址、无 CORS 网关的自动代理回退、多会话持久化、移动端。

@@ -278,6 +278,16 @@
       <button class="icon-btn modal-close" aria-label="关闭">×</button>
     </header>
     <div class="chat-settings-body">
+      <label class="field-label" for="csProto">API 协议</label>
+      <select id="csProto" class="text-input">
+        <option value="openai">OpenAI 兼容（Chat Completions，适用绝大多数网关）</option>
+        <option value="anthropic">Anthropic 兼容（Messages，DeepSeek 官方 chat-demo 方式）</option>
+      </select>
+
+      <label class="field-label" for="csOrigin">API 地址</label>
+      <input id="csOrigin" class="text-input" placeholder="https://api.deepseek.com 或 https://你的网关/v1" autocomplete="off">
+      <p class="hint" style="margin:6px 0 0">填服务基础地址即可，应用会按所选协议自动拼接路径；结尾有没有 <code>/v1</code> 都能识别。</p>
+
       <label class="field-label" for="csKey">API Key <em>*</em></label>
       <div class="cs-key-row">
         <input id="csKey" class="text-input" type="password" placeholder="sk-…" autocomplete="off">
@@ -285,100 +295,27 @@
         <button id="csVerify" class="ghost-btn small" type="button">验证</button>
       </div>
       <div class="field-error" id="csKeyErr"></div>
-      <p class="hint">Key 只保存在本浏览器的 localStorage，不会上传到本应用服务器。验证通过 GET /models 完成，不产生费用。</p>
+      <p class="hint">Key 只保存在本浏览器的 localStorage，不会上传到本应用服务器。</p>
 
-      <label class="field-label" for="csOrigin">API 地址</label>
-      <input id="csOrigin" class="text-input" placeholder="https://api.deepseek.com" autocomplete="off">
-
-      <label class="field-label" for="csModel">模型</label>
-      <select id="csModel" class="text-input">
-        <option value="deepseek-flash">deepseek-flash（快速）</option>
-        <option value="deepseek-v4-pro">deepseek-v4-pro（更强）</option>
-      </select>
-
-      <label class="cs-thinking-row">
-        <input type="checkbox" id="csThinking">
-        <span>深度思考<span class="hint" style="display:block;margin:0">回答前先推理，速度稍慢，复杂安排更周全</span></span>
-      </label>
-    </div>
-    <footer class="modal-foot">
-      <span class="pm-summary">聊天内容会直接发送给你配置的 API 服务</span>
-      <div class="modal-foot-btns">
-        <button class="ghost-btn modal-close" type="button">取消</button>
-        <button id="csSave" class="primary-btn" type="button">保存</button>
-      </div>
-    </footer>
-  </div>
-</div>
-
-<!-- AI 助手面板 -->
-<div id="chatScrim" class="chat-scrim hidden"></div>
-<aside id="chatPanel" class="chat-panel" aria-label="AI 助手">
-  <header class="chat-head">
-    <button id="chatSessionsBtn" class="icon-btn" title="会话列表" aria-label="会话列表">
-      <svg viewBox="0 0 20 20" width="17" height="17"><path d="M3 5.5h14M3 10h14M3 14.5h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    </button>
-    <div class="chat-title-wrap">
-      <div id="chatTitle" class="chat-title">新对话</div>
-      <div class="chat-subtitle">计划助手 · 了解你的全部计划</div>
-    </div>
-    <button id="chatNewBtn" class="icon-btn" title="新对话" aria-label="新对话">
-      <svg viewBox="0 0 20 20" width="17" height="17"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-    </button>
-    <button id="chatSettingsBtn" class="icon-btn" title="API 设置" aria-label="API 设置">
-      <svg viewBox="0 0 20 20" width="17" height="17"><circle cx="10" cy="10" r="2.6" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M10 2.8v2.4M10 14.8v2.4M2.8 10h2.4M14.8 10h2.4M4.9 4.9l1.7 1.7M13.4 13.4l1.7 1.7M15.1 4.9l-1.7 1.7M6.6 13.4l-1.7 1.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
-    <button id="chatCloseBtn" class="icon-btn" title="关闭（Esc）" aria-label="关闭">×</button>
-  </header>
-
-  <div id="chatSessionList" class="chat-session-list hidden"></div>
-
-  <div id="chatMessages" class="chat-messages"></div>
-
-  <div class="chat-input-area">
-    <div id="chatStatus" class="chat-status hidden"></div>
-    <div class="chat-input-box">
-      <textarea id="chatInput" rows="1" maxlength="8000" placeholder="聊聊你的计划，或让 AI 帮你安排…（Enter 发送）"></textarea>
-      <button id="chatSendBtn" class="chat-send" title="发送" aria-label="发送">
-        <svg viewBox="0 0 20 20" width="17" height="17"><path d="M3.5 10l13-6.5-4.5 13-2.5-5.5-6-1z" fill="currentColor"/></svg>
-      </button>
-      <button id="chatStopBtn" class="chat-stop hidden" title="停止生成" aria-label="停止生成">
-        <svg viewBox="0 0 20 20" width="14" height="14"><rect x="4" y="4" width="12" height="12" rx="2.5" fill="currentColor"/></svg>
-      </button>
-    </div>
-    <div class="chat-foot-note">Key 仅存于本浏览器 · 对话直连你配置的 API 服务</div>
-  </div>
-</aside>
-
-<!-- AI 设置弹窗 -->
-<div id="chatSettingsModal" class="modal-backdrop hidden">
-  <div class="modal chat-settings-modal" role="dialog" aria-modal="true" aria-labelledby="chatSettingsTitle">
-    <header class="modal-head">
-      <h3 id="chatSettingsTitle">AI 助手设置</h3>
-      <button class="icon-btn modal-close" aria-label="关闭">×</button>
-    </header>
-    <div class="chat-settings-body">
-      <label class="field-label" for="csKey">API Key <em>*</em></label>
+      <label class="field-label" for="csModel">模型 ID</label>
       <div class="cs-key-row">
-        <input id="csKey" class="text-input" type="password" placeholder="sk-…" autocomplete="off">
-        <button id="csKeyShow" class="ghost-btn small" type="button">显示</button>
-        <button id="csVerify" class="ghost-btn small" type="button">验证</button>
+        <input id="csModel" class="text-input" list="csModelList" placeholder="deepseek-chat / deepseek-flash / 网关提供的名称" autocomplete="off">
+        <button id="csFetchModels" class="ghost-btn small" type="button">拉取模型列表</button>
       </div>
-      <div class="field-error" id="csKeyErr"></div>
-      <p class="hint">Key 只保存在本浏览器的 localStorage，不会上传到本应用服务器。验证通过 GET /models 完成，不产生费用。</p>
+      <datalist id="csModelList"></datalist>
+      <p class="hint" style="margin:6px 0 0">模型名以你所用服务实际提供的为准；「拉取模型列表」通过 GET /models 获取该 Key 可用的模型。</p>
 
-      <label class="field-label" for="csOrigin">API 地址</label>
-      <input id="csOrigin" class="text-input" placeholder="https://api.deepseek.com" autocomplete="off">
-
-      <label class="field-label" for="csModel">模型</label>
-      <select id="csModel" class="text-input">
-        <option value="deepseek-flash">deepseek-flash（快速）</option>
-        <option value="deepseek-v4-pro">deepseek-v4-pro（更强）</option>
+      <label class="field-label" for="csTransport">请求方式</label>
+      <select id="csTransport" class="text-input">
+        <option value="auto">自动（默认：直连失败时走本机代理）</option>
+        <option value="direct">浏览器直连</option>
+        <option value="proxy">始终经本机服务代理</option>
       </select>
+      <p class="hint" style="margin:6px 0 0">部分内网网关不允许浏览器跨域；选「自动」时应用会检测并切换为经由本机 app.py 转发，Key 仅透传不保存。</p>
 
       <label class="cs-thinking-row">
         <input type="checkbox" id="csThinking">
-        <span>深度思考<span class="hint" style="display:block;margin:0">回答前先推理，速度稍慢，复杂安排更周全</span></span>
+        <span>深度思考<span class="hint" style="display:block;margin:0">回答前先推理，速度稍慢；需你所用服务支持该参数</span></span>
       </label>
     </div>
     <footer class="modal-foot">

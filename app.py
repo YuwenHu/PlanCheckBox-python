@@ -483,7 +483,58 @@ class Handler(BaseHTTPRequestHandler):
                 p["tasks"].sort(key=lambda x: (x["date"], x["title"]))
                 save_plan(p)
                 return self.send_json(nt, 201)
+            if path == "/api/llm/stream":
+                return self.proxy_llm(body)
         return self.send_err("not found", 404)
+
+    # ---- LLM 网关代理：当网关不允许浏览器跨域时，由本机服务转发流式响应。
+    # 仅转发请求头与请求体，不保存 Key；只允许 http/https。
+    def proxy_llm(self, body):
+        import urllib.error
+        import urllib.request as ureq
+        url = body.get("url") if isinstance(body, dict) else None
+        if not isinstance(url, str) or not url.startswith(("http://", "https://")):
+            return self.send_err("非法的转发地址")
+        method = body.get("method") if isinstance(body.get("method"), str) else "POST"
+        if method.upper() not in ("GET", "POST"):
+            method = "POST"
+        headers = {}
+        src = body.get("headers") or {}
+        if isinstance(src, dict):
+            for k, v in src.items():
+                if isinstance(k, str) and isinstance(v, str) and k.lower() in (
+                        "authorization", "x-api-key", "content-type", "accept", "anthropic-beta"):
+                    headers[k] = v
+        payload = None if method.upper() == "GET" else json.dumps(body.get("body") or {}).encode("utf-8")
+        req = ureq.Request(url, data=payload, headers=headers, method=method.upper())
+        try:
+            resp = ureq.urlopen(req, timeout=600)
+        except urllib.error.HTTPError as e:
+            data = e.read()[:65536]
+            self.send_response(e.code)
+            self.send_header("Content-Type", e.headers.get("Content-Type", "application/json") if e.headers else "application/json")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+            return
+        except Exception as e:
+            return self.send_err("无法连接目标 API（从本机出发）：" + str(e), 502)
+        ctype = resp.headers.get("Content-Type", "application/json")
+        self.send_response(resp.status)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        try:
+            while True:
+                chunk = resp.read(4096)
+                if not chunk:
+                    break
+                self.wfile.write(chunk)
+                self.wfile.flush()
+        except (BrokenPipeError, OSError):
+            pass
+        finally:
+            resp.close()
 
     def do_PUT(self):
         path = urlparse(self.path).path
