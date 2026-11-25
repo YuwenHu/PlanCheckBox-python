@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import sys
 import tempfile
 import unittest
@@ -151,7 +152,7 @@ class ToggleTest(ServiceCase):
                                    [support.task("t1", "行列式", "2026-11-02", extra_field={"keep": 1}),
                                     support.task("t2", "矩阵", "2026-11-03")],
                                    group_name="数二", day_extra={"note": "保留字段"})
-        self.progress_path = self.tmp / "math2_checkbox_use_progress.json"
+        self.progress_path = self.tmp / "appdata" / "progress" / "math2_checkbox_use_progress.json"
         self.svc = AppService()
         self.svc.add_paths([str(self.path)])
         self.svc.dispatch("to_overview")
@@ -159,6 +160,17 @@ class ToggleTest(ServiceCase):
 
     def read_progress(self):
         return json.loads(self.progress_path.read_text(encoding="utf-8"))
+
+    def test_progress_lands_in_data_progress_dir(self):
+        with mock.patch("app.core.service.now_local_iso", return_value=T1):
+            result = self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": True})
+        self.assertTrue(result["ok"])
+        self.assertTrue(self.progress_path.exists())
+        self.assertEqual(self.progress_path.parent.name, "progress")
+        self.assertEqual(self.progress_path.parent.parent, self.tmp / "appdata")
+        self.assertFalse((self.tmp / "math2_checkbox_use_progress.json").exists(),
+                         "不应再写到题库同目录")
+        self.assertIn("progress", result["message"])
 
     def test_check_writes_progress_only_and_bank_is_untouched(self):
         before = self.path.read_bytes()
@@ -235,6 +247,7 @@ class ToggleTest(ServiceCase):
         self.assertFalse(self.progress_path.exists())
 
     def test_corrupt_progress_file_blocks_write_and_is_preserved(self):
+        self.progress_path.parent.mkdir(parents=True, exist_ok=True)
         self.progress_path.write_text("{oops", encoding="utf-8")
         svc = AppService()
         svc.add_paths([str(self.path)])
@@ -267,7 +280,7 @@ class LegacyInlineTest(ServiceCase):
         before = path.read_bytes()
         svc = AppService()
         svc.add_paths([str(path)])
-        progress_path = self.tmp / "math2_checkbox_use_progress.json"
+        progress_path = self.tmp / "appdata" / "progress" / "math2_checkbox_use_progress.json"
         self.assertTrue(progress_path.exists(), "读取老文件时应生成进度文件")
         self.assertEqual(path.read_bytes(), before, "老题库文件不能被改写")
         doc = json.loads(progress_path.read_text(encoding="utf-8"))
@@ -275,6 +288,69 @@ class LegacyInlineTest(ServiceCase):
         self.assertNotIn("b", doc["tasks"])
         self.assertEqual(len(svc.groups[0].tasks), 2)
         self.assertTrue(next(t for t in svc.groups[0].tasks if t.id == "a").done)
+
+
+class ProgressLocationTest(ServiceCase):
+    def test_bank_under_banks_uses_progress_dir(self):
+        folder = self.tmp / "appdata" / "banks"
+        folder.mkdir(parents=True)
+        path = folder / "math2_checkbox_use.json"
+        support.write_json(path, support.bank_json([support.task("t1", "行列式", "2026-11-02")]))
+        svc = AppService()
+        svc.add_paths([str(path)])
+        with mock.patch("app.core.service.now_local_iso", return_value=T1):
+            result = svc.dispatch("toggle_task", {"path": str(path), "id": "t1", "checked": True})
+        self.assertTrue(result["ok"])
+        expected = self.tmp / "appdata" / "progress" / "math2_checkbox_use_progress.json"
+        self.assertTrue(expected.exists())
+        self.assertFalse((folder / "math2_checkbox_use_progress.json").exists())
+
+    def test_legacy_sibling_progress_is_read_then_migrated(self):
+        path = self.make_bank("math2_checkbox_use.json",
+                              [support.task("t1", "行列式", "2026-11-02")])
+        svc = AppService()
+        svc.add_paths([str(path)])
+        with mock.patch("app.core.service.now_local_iso", return_value=T1):
+            svc.dispatch("toggle_task", {"path": str(path), "id": "t1", "checked": True})
+        new_path = self.tmp / "appdata" / "progress" / "math2_checkbox_use_progress.json"
+        legacy = self.tmp / "math2_checkbox_use_progress.json"
+        self.assertTrue(new_path.exists())
+        shutil.move(str(new_path), str(legacy))
+
+        svc2 = AppService()  # 会话恢复时读取旧位置
+        self.assertEqual(len(svc2.groups), 1)
+        self.assertTrue(next(t for t in svc2.groups[0].tasks if t.id == "t1").done,
+                        "应能从旧位置读到进度")
+        self.assertTrue(new_path.exists(), "读取旧位置后应迁移回 progress\\")
+        self.assertTrue(legacy.exists(), "旧位置的进度文件应保留")
+        self.assertIn("旧", svc2.notices.get(str(path), ""))
+
+    def test_progress_dir_creation_failure_falls_back_to_bank_dir(self):
+        path = self.make_bank("math2_checkbox_use.json",
+                              [support.task("t1", "行列式", "2026-11-02")])
+        blocker = self.tmp / "appdata" / "progress"
+        blocker.write_text("not a folder", encoding="utf-8")
+        svc = AppService()
+        svc.add_paths([str(path)])
+        self.assertIn("无法创建进度目录", svc.notices.get(str(path), ""))
+
+        with mock.patch("app.core.service.now_local_iso", return_value=T1):
+            result = svc.dispatch("toggle_task", {"path": str(path), "id": "t1", "checked": True})
+        self.assertTrue(result["ok"], "进度目录创建失败时仍要能勾选")
+        self.assertIn("无法创建进度目录", result["message"])
+        fallback = self.tmp / "math2_checkbox_use_progress.json"
+        self.assertTrue(fallback.exists())
+        self.assertTrue(json.loads(fallback.read_text(encoding="utf-8"))["tasks"]["t1"]["done"])
+
+    def test_first_launch_creates_data_dir_and_progress_dir(self):
+        fresh = self.tmp / "fresh" / "nested"
+        os.environ["PLANCHECKBOX_DATA_DIR"] = str(fresh)
+        path = self.make_bank("math2_checkbox_use.json",
+                              [support.task("t1", "行列式", "2026-11-02")])
+        svc = AppService()
+        svc.add_paths([str(path)])
+        self.assertTrue(fresh.is_dir(), "首次使用应自动创建数据目录")
+        self.assertTrue((fresh / "progress").is_dir(), "应自动创建 progress 子目录")
 
 
 class CalendarAndStatsTest(ServiceCase):

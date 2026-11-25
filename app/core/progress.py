@@ -20,6 +20,7 @@ from .parser import Group, Task, clean_history
 FORMAT_NAME = "plancheckbox-progress"
 FORMAT_VERSION = 1
 SUFFIX = "_progress.json"
+PROGRESS_DIR_NAME = "progress"
 SOURCE_KEYS = ("hash", "taskCount", "generatedAt", "formatVersion")
 META_KEYS = ("groupName", "subject", "kind", "priority", "examDate", "planStart",
              "generatedAt", "version")
@@ -40,8 +41,19 @@ class Migration:
 
 
 # --------------------------------------------------------------------- 基础
+def progress_dir(data_root) -> Path:
+    """数据根目录下的进度子目录：``<数据根>\\progress``。"""
+    return Path(data_root) / PROGRESS_DIR_NAME
+
+
+def progress_path_in(dir_path, bank_path) -> Path:
+    """指定目录里的进度文件：``<dir>\\<题库名>_progress.json``。"""
+    p = Path(bank_path)
+    return Path(dir_path) / f"{p.stem}{SUFFIX}"
+
+
 def progress_path(bank_path) -> Path:
-    """题库旁的进度文件：``math2_checkbox_use.json`` → ``math2_checkbox_use_progress.json``。"""
+    """旧位置：题库同目录的 ``<题库名>_progress.json``（仅用于兼容读取）。"""
     p = Path(bank_path)
     return p.with_name(f"{p.stem}{SUFFIX}")
 
@@ -152,8 +164,8 @@ def read(path) -> dict | None:
     }
 
 
-def write(bank_path, doc: dict) -> None:
-    """原子写入进度文件；键排序，保证同一状态生成同样的文本。"""
+def write(path, doc: dict) -> None:
+    """原子写入指定的进度文件；键排序，保证同一状态生成同样的文本。"""
     source = doc.get("source") if isinstance(doc.get("source"), dict) else {}
     payload = {
         "format": FORMAT_NAME,
@@ -163,7 +175,7 @@ def write(bank_path, doc: dict) -> None:
         "tasks": {k: doc["tasks"][k] for k in sorted(doc.get("tasks") or {})},
         "unmatched": {k: doc["unmatched"][k] for k in sorted(doc.get("unmatched") or {})},
     }
-    jsonio.write_text_atomic(progress_path(bank_path), jsonio.serialize(payload))
+    jsonio.write_text_atomic(Path(path), jsonio.serialize(payload))
 
 
 # --------------------------------------------------------------------- 迁移
@@ -310,7 +322,7 @@ def set_record(doc: dict, task_id: str, title: str, done: bool,
 
 
 __all__ = [
-    "FORMAT_NAME", "FORMAT_VERSION", "SUFFIX", "ProgressError", "Migration",
-    "progress_path", "fingerprint", "same_source", "has_state", "empty_doc",
-    "read", "write", "legacy_records", "resolve", "apply", "set_record",
+    "FORMAT_NAME", "FORMAT_VERSION", "SUFFIX", "PROGRESS_DIR_NAME", "ProgressError", "Migration",
+    "progress_dir", "progress_path_in", "progress_path", "fingerprint", "same_source", "has_state",
+    "empty_doc", "read", "write", "legacy_records", "resolve", "apply", "set_record",
 ]

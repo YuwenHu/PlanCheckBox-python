@@ -64,8 +64,7 @@ class AppService:
 
     def _load_path(self, path: str) -> FileEntry:
         entry = FileEntry(path=path, file_name=os.path.basename(path),
-                          display_name=display_name_from_file_name(os.path.basename(path)),
-                          progress_path=str(progress.progress_path(path)))
+                          display_name=display_name_from_file_name(os.path.basename(path)))
         self._note(entry, self._refresh(entry))
         return entry
 
@@ -100,18 +99,58 @@ class AppService:
         entry.group = result.group
         entry.display_name = result.group.display_name
         entry.fingerprint = progress.fingerprint(raw, entry.group)
-        return self._attach_progress(entry)
+        read_path, write_path, fallback = self._progress_places(entry)
+        entry.progress_path = str(write_path)
+        note = self._attach_progress(entry, read_path, write_path)
+        return "\n".join(part for part in (fallback, note) if part)
 
-    def _attach_progress(self, entry: FileEntry) -> str:
-        """套用进度文件：同指纹直接合并，不同指纹迁移，没有则从旧格式内嵌状态生成。"""
-        note = ""
+    def _progress_places(self, entry: FileEntry) -> tuple[Path, Path, str]:
+        """进度文件定位：优先 ``<数据根>\\progress\\``，创建失败降级到题库同目录。
+
+        返回 ``(读取路径, 写入路径, 降级原因)``。读取路径兼容旧位置（题库同目录）。
+        """
+        bank = Path(entry.path)
+        legacy = progress.progress_path(bank)
         try:
-            doc = progress.read(entry.progress_path)
+            root = store.data_dir()
+        except store.DataDirUnavailable:
+            return legacy, legacy, "数据目录不可用，进度暂时写在题库同目录。勾选仍会正常记录。"
+
+        target_dir = progress.progress_dir(root)
+        preferred = progress.progress_path_in(target_dir, bank)
+        try:
+            target_dir.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:
+            reason = exc.strerror or exc
+            return (legacy, legacy,
+                    f"无法创建进度目录 {target_dir}（{reason}），已改为写在题库同目录：{legacy.parent}。\n"
+                    "勾选仍会正常记录，不受影响。")
+        if preferred.exists():
+            return preferred, preferred, ""
+        if legacy.exists():
+            # 旧位置有进度：先读它，写回时落到新的 progress\ 目录
+            return legacy, preferred, ""
+        return preferred, preferred, ""
+
+    def _label(self, path) -> str:
+        """尽量显示相对数据根目录的路径，便于用户找到文件。"""
+        target = Path(path)
+        try:
+            return str(target.relative_to(store.data_dir()))
+        except (ValueError, OSError, store.DataDirUnavailable):
+            return str(target)
+
+    def _attach_progress(self, entry: FileEntry, read_path: Path, write_path: Path) -> str:
+        """套用进度文件：同指纹直接合并，不同指纹迁移，没有则从旧格式内嵌状态生成。"""
+        notes: list[str] = []
+        migrating = Path(read_path).exists() and Path(read_path) != Path(write_path)
+        try:
+            doc = progress.read(read_path)
         except progress.ProgressError as exc:
             # 文件坏了：只读不写，避免把用户的记录覆盖掉
             entry.progress = None
             entry.progress_error = str(exc)
-            return (f"进度文件无法使用：{entry.progress_path}\n{exc}\n"
+            return (f"进度文件无法使用：{read_path}\n{exc}\n"
                     "为避免覆盖已有记录，程序不会改写它；请备份后删除该文件再重试。")
 
         if doc is not None:
@@ -120,15 +159,17 @@ class AppService:
             progress.apply(entry.group, doc)
             entry.progress = doc
             if report.message:
-                note = report.message
-            if not unchanged:
+                notes.append(report.message)
+            if not unchanged or migrating:
                 doc["source"]["file"] = entry.file_name
                 try:
-                    progress.write(entry.path, doc)
+                    progress.write(write_path, doc)
+                    if migrating:
+                        notes.append(f"进度文件已迁移到 {self._label(write_path)}"
+                                     "（题库同目录的旧文件保留未动）。")
                 except OSError as exc:
-                    note = f"{note}\n进度文件写入失败：{exc.strerror or exc}（本次仅保存在内存中）" \
-                        if note else f"进度文件写入失败：{exc.strerror or exc}"
-            return note
+                    notes.append(f"进度文件写入失败：{exc.strerror or exc}（本次仅保存在内存中）")
+            return "\n".join(notes)
 
         # 老式单文件：done/doneAt/history 内嵌在题库里 → 生成进度文件，但不改题库
         legacy = progress.legacy_records(entry.group)
@@ -138,12 +179,12 @@ class AppService:
         doc["tasks"] = legacy
         entry.progress = doc
         try:
-            progress.write(entry.path, doc)
+            progress.write(write_path, doc)
             return (f"已从旧格式题库读出 {len(legacy)} 条完成记录，"
-                    f"生成进度文件 {os.path.basename(entry.progress_path)}（题库未被修改）。")
+                    f"生成进度文件 {self._label(write_path)}（题库未被修改）。")
         except OSError as exc:
             return (f"已从旧格式题库读出 {len(legacy)} 条记录，但无法创建"
-                    f"{os.path.basename(entry.progress_path)}：{exc.strerror or exc}\n"
+                    f"{self._label(write_path)}：{exc.strerror or exc}\n"
                     "请把题库放到可写目录，或先保存到别处再重试。")
 
     # ------------------------------------------------------------------ 会话
@@ -377,8 +418,9 @@ class AppService:
         history = clean_history(list(task.history) + [{"action": "done" if checked else "undone", "at": now}])
         done_at = now if checked else (task.done_at or model.last_done_at(task))
 
+        read_path, write_path, fallback = self._progress_places(entry)
         try:
-            disk = progress.read(entry.progress_path)
+            disk = progress.read(read_path)
         except progress.ProgressError as exc:
             return {"ok": False, "message": f"进度文件不可用，未写入：{exc}", "kind": "error"}
 
@@ -395,11 +437,12 @@ class AppService:
         doc["updatedAt"] = now
         doc.setdefault("source", {})["file"] = entry.file_name
         try:
-            progress.write(entry.path, doc)
+            progress.write(write_path, doc)
         except OSError as exc:
             return {"ok": False, "message": f"进度写入失败：{exc.strerror or exc}", "kind": "error"}
 
         entry.progress = doc
+        entry.progress_path = str(write_path)
         entry.progress_error = ""
         self.last_write = now
         task.done = checked
@@ -408,9 +451,11 @@ class AppService:
 
         clock = now[11:19]
         msg = (f"已记录「{entry.file_name}」· {clock} · "
-               f"进度存入 {os.path.basename(entry.progress_path)}")
+               f"进度存入 {self._label(write_path)}")
         if migrated:
             msg += "；" + migrated
+        if fallback:
+            msg += "\n" + fallback
         if external:
             msg += external
         return {"ok": True, "message": msg}
@@ -633,7 +678,7 @@ class AppService:
             "files": rows,
             "total": len(self.files),
             "valid": len(valid),
-            "writeStatus": ("勾选后自动写入独立的 *_progress.json；题库 JSON 保持只读，不会被修改"
+            "writeStatus": ("勾选后自动写入数据目录 progress\\ 下的 *_progress.json；题库 JSON 保持只读，不会被修改"
                             if valid else "选择文件后自动开启进度记录"),
         }
 

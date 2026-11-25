@@ -4,7 +4,7 @@
 数据读写改由 Python 直接操作本地 JSON。
 
 - 界面：pywebview + 系统自带 WebView2（不引入 Qt / Electron / Node）
-- 数据：题库 `*_checkbox_use.json` 只读；完成状态写在同目录的 `<题库名>_progress.json`，题库永不被改写
+- 数据：题库 `*_checkbox_use.json` 只读；完成状态写在数据目录 `progress\` 下的 `<题库名>_progress.json`，题库永不被改写
 - 分发：PyInstaller 单文件 exe，目标机器不需要安装 Python
 
 ## 快速开始
@@ -56,7 +56,7 @@
 **5. 勾选任务**
 
 1. 在周度页（或月历弹窗）里点任务前的方框即可勾选。
-2. **完成时间记在哪里**：立刻写入题库旁边的同名进度文件（`math2_checkbox_use.json` → `math2_checkbox_use_progress.json`）——该任务的 `done` 变 `true`、`doneAt` 变成当前本地时间（带时区，例如 `2026-11-06T09:10:00+08:00`）、`history` 追加一条 `{"action":"done","at":...}`。
+2. **完成时间记在哪里**：立刻写入数据目录 `progress\` 下的同名进度文件（`math2_checkbox_use.json` → `%LOCALAPPDATA%\PlanCheckBox\progress\math2_checkbox_use_progress.json`）——该任务的 `done` 变 `true`、`doneAt` 变成当前本地时间（带时区，例如 `2026-11-06T09:10:00+08:00`）、`history` 追加一条 `{"action":"done","at":...}`。
 3. 取消勾选：`done` 变 `false`，但 `doneAt` 保留最后一次完成时间，`history` 追加一条 `undone`（所以「之前完成过」不会丢）。
 4. **题库文件本身不会被改动**：进度全在 `_progress.json` 里，所以题库可以随时被 AI 重新生成、覆盖、换机器，都不会破坏你的勾选记录。
 
@@ -225,7 +225,15 @@ onefile 启动时解压到 `%TEMP%\_MEI<十六进制>`，正常退出时 PyInsta
 
 ### 进度文件（程序唯一会写的数据）
 
-与题库同目录、同名加 `_progress.json` 后缀：
+位置：**数据目录下的 `progress\` 子目录**，文件名为 `<题库名>_progress.json`（保留 `_checkbox_use`）：
+
+```
+<数据根>\progress\math2_checkbox_use_progress.json
+```
+
+- 题库放在 `<数据根>\banks\` 下或直接放在数据根下都一样，进度统一进 `<数据根>\progress\`
+- `progress\` 不存在时首次勾选自动创建；创建失败会降级到题库同目录并在界面说明原因，勾选不受影响
+- 旧版本写在题库同目录的进度文件仍会被读取；找到后自动迁移到 `progress\`（旧文件保留不动）
 
 ```
 { "format": "plancheckbox-progress",
@@ -264,7 +272,7 @@ onefile 启动时解压到 `%TEMP%\_MEI<十六进制>`，正常退出时 PyInsta
 早期题库把 `done` / `doneAt` / `history` 内嵌在任务里。读取这类文件时：
 
 1. 照常解析，勾选状态立即生效；
-2. 若确实存在完成状态（`done=true` 或有历史），自动生成同目录的 `_progress.json` 把状态搬过去；
+2. 若确实存在完成状态（`done=true` 或有历史），自动生成数据目录 `progress\` 下的 `_progress.json` 把状态搬过去；
 3. **不修改、不删除原题库文件**，也不去掉里面的内嵌字段；
 4. 之后所有读写都以进度文件为准；若进度文件已存在，则以进度文件为权威。
 5. 进度文件损坏（不是合法 JSON / 不是本程序格式）时只读不写，并在界面提示「为避免覆盖已有记录，程序不会改写它」，不会静默重建。

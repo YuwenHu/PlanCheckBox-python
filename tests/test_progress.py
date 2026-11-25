@@ -32,6 +32,14 @@ class FingerprintTest(unittest.TestCase):
                          "math2_checkbox_use_progress.json")
         self.assertEqual(progress.progress_path("/a/b.json").parent.name, "a")
 
+    def test_progress_dir_and_path_in(self):
+        root = Path(r"C:\data")
+        self.assertEqual(progress.progress_dir(root), root / "progress")
+        path = progress.progress_path_in(progress.progress_dir(root),
+                                         r"C:\data\banks\math2_checkbox_use.json")
+        self.assertEqual(path.parent.name, "progress")
+        self.assertEqual(path.name, "math2_checkbox_use_progress.json")
+
     def test_stable_across_formatting_and_equal_keys(self):
         raw, group = make_group([support.task("t1", "行列式", "2026-11-02")])
         first = progress.fingerprint(raw, group)
@@ -172,8 +180,10 @@ class FileIoTest(unittest.TestCase):
         doc = progress.empty_doc(self.fp, self.bank.name)
         progress.set_record(doc, "t1", "行列式", True, T1, [{"action": "done", "at": T1}])
         doc["updatedAt"] = T2
-        progress.write(str(self.bank), doc)
-        path = progress.progress_path(self.bank)
+        folder = progress.progress_dir(self.tmp / "root")
+        folder.mkdir(parents=True)
+        path = progress.progress_path_in(folder, self.bank)
+        progress.write(path, doc)
         self.assertTrue(path.exists())
         data = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(data["format"], "plancheckbox-progress")

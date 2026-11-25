@@ -64,7 +64,7 @@
     return '<section class="page page-1">' +
         '<div class="page-head"><h1>选择任务 · 任务进度追踪</h1></div>' +
         '<p class="lead">选择题库 JSON（可一次多选，也可分多次追加）。列表名优先取 <code>meta.groupName</code>，' +
-          '缺失时回退到文件名 <code>_checkbox_use</code> 之前的部分；勾选只写入同名的 <code>_progress.json</code>，题库保持只读。</p>' +
+          '缺失时回退到文件名 <code>_checkbox_use</code> 之前的部分；勾选只写入数据目录 <code>progress\\</code> 下的 <code>_progress.json</code>，题库保持只读。</p>' +
         '<div class="drop card"><span class="drop-badge">JSON</span>' +
           '<button class="btn btn-primary" type="button" data-act="pick-files">选择文件</button>' +
           '<div class="muted small">支持多选与追加；建议同时载入健身组，月度/周度页会汇总健身任务</div></div>' +
@@ -76,7 +76,7 @@
         '<div class="autosave card"><div class="autosave-main">' +
           '<div><span class="autosave-title">自动写盘</span>' +
             '<span class="autosave-status" id="autosaveStatus">' + esc(p.writeStatus) + '</span></div>' +
-          '<div class="autosave-note">勾选/取消会立即写入题库旁的 <code>_progress.json</code>（只含 done / doneAt / history 与题库指纹），' +
+          '<div class="autosave-note">勾选/取消会立即写入数据目录 <code>progress\\</code> 下的 <code>_progress.json</code>（只含 done / doneAt / history 与题库指纹），' +
             '原题库文件永远只读；题库更新后按 taskId 优先、标题兜底自动迁移进度。</div>' +
         '</div><div class="autosave-actions"><span class="muted small">直接读写本地文件</span></div></div>' +
         '<div class="page-actions">' +
