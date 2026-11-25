@@ -1,0 +1,150 @@
+{
+  "name": "英语词汇突破",
+  "emoji": "🗣️",
+  "color": "magenta",
+  "description": "每天 30 分钟，四周过一遍核心词表。",
+  "startDate": "2026-11-13",
+  "endDate": "2026-12-10",
+  "tasks": [
+    {
+      "title": "背单词 List 1",
+      "date": "2026-11-13",
+      "done": false
+    },
+    {
+      "title": "背单词 List 2",
+      "date": "2026-11-14",
+      "done": false
+    },
+    {
+      "title": "背单词 List 3",
+      "date": "2026-11-15",
+      "done": false
+    },
+    {
+      "title": "背单词 List 4",
+      "date": "2026-11-16",
+      "done": false
+    },
+    {
+      "title": "背单词 List 5",
+      "date": "2026-11-17",
+      "done": false
+    },
+    {
+      "title": "背单词 List 6",
+      "date": "2026-11-18",
+      "done": false
+    },
+    {
+      "title": "背单词 List 7",
+      "date": "2026-11-19",
+      "done": false
+    },
+    {
+      "title": "背单词 List 8",
+      "date": "2026-11-20",
+      "done": false
+    },
+    {
+      "title": "背单词 List 9",
+      "date": "2026-11-21",
+      "done": false
+    },
+    {
+      "title": "背单词 List 10",
+      "date": "2026-11-22",
+      "done": false
+    },
+    {
+      "title": "背单词 List 11",
+      "date": "2026-11-23",
+      "done": false
+    },
+    {
+      "title": "背单词 List 12",
+      "date": "2026-11-24",
+      "done": false
+    },
+    {
+      "title": "背单词 List 13",
+      "date": "2026-11-25",
+      "done": false
+    },
+    {
+      "title": "背单词 List 14",
+      "date": "2026-11-26",
+      "done": false
+    },
+    {
+      "title": "背单词 List 15",
+      "date": "2026-11-27",
+      "done": false
+    },
+    {
+      "title": "背单词 List 16",
+      "date": "2026-11-28",
+      "done": false
+    },
+    {
+      "title": "背单词 List 17",
+      "date": "2026-11-29",
+      "done": false
+    },
+    {
+      "title": "背单词 List 18",
+      "date": "2026-11-30",
+      "done": false
+    },
+    {
+      "title": "背单词 List 19",
+      "date": "2026-12-01",
+      "done": false
+    },
+    {
+      "title": "背单词 List 20",
+      "date": "2026-12-02",
+      "done": false
+    },
+    {
+      "title": "背单词 List 21",
+      "date": "2026-12-03",
+      "done": false
+    },
+    {
+      "title": "背单词 List 22",
+      "date": "2026-12-04",
+      "done": false
+    },
+    {
+      "title": "背单词 List 23",
+      "date": "2026-12-05",
+      "done": false
+    },
+    {
+      "title": "背单词 List 24",
+      "date": "2026-12-06",
+      "done": false
+    },
+    {
+      "title": "背单词 List 25",
+      "date": "2026-12-07",
+      "done": false
+    },
+    {
+      "title": "背单词 List 26",
+      "date": "2026-12-08",
+      "done": false
+    },
+    {
+      "title": "背单词 List 27",
+      "date": "2026-12-09",
+      "done": false
+    },
+    {
+      "title": "背单词 List 28",
+      "date": "2026-12-10",
+      "done": false
+    }
+  ]
+}

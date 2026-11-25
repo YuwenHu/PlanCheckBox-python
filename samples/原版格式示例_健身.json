@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "groupName": "健身",
+    "subject": "体能与健身",
+    "kind": "fitness",
+    "examDate": "2027-01-12",
+    "planStart": "2026-11-10",
+    "generatedAt": "2026-11-13T10:00:00+08:00",
+    "version": 1
+  },
+  "months": [
+    {
+      "id": "2026-11",
+      "label": "2026年11月",
+      "weeks": [
+        {
+          "id": "2026-11-10",
+          "index": 1,
+          "label": "第一周",
+          "start": "2026-11-10",
+          "end": "2026-11-23",
+          "days": [
+            {
+              "date": "2026-11-10",
+              "type": "rest",
+              "tasks": []
+            },
+            {
+              "date": "2026-11-11",
+              "type": "fitness",
+              "tasks": [
+                {
+                  "id": "FIT-20261111-01",
+                  "title": "有氧：慢跑 5 公里",
+                  "topic": "有氧",
+                  "kind": "fitness",
+                  "priority": "P1",
+                  "minutes": 50,
+                  "slot": "晚",
+                  "done": true,
+                  "doneAt": "2026-11-11T20:00:00+08:00"
+                }
+              ]
+            },
+            {
+              "date": "2026-11-12",
+              "type": "rest",
+              "tasks": []
+            },
+            {
+              "date": "2026-11-13",
+              "type": "fitness",
+              "tasks": [
+                {
+                  "id": "FIT-20261113-01",
+                  "title": "有氧：慢跑 5 公里",
+                  "topic": "有氧",
+                  "kind": "fitness",
+                  "priority": "P1",
+                  "minutes": 50,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-14",
+              "type": "rest",
+              "tasks": []
+            },
+            {
+              "date": "2026-11-15",
+              "type": "rest",
+              "tasks": []
+            },
+            {
+              "date": "2026-11-16",
+              "type": "fitness",
+              "tasks": [
+                {
+                  "id": "FIT-20261116-01",
+                  "title": "有氧：慢跑 5 公里",
+                  "topic": "有氧",
+                  "kind": "fitness",
+                  "priority": "P1",
+                  "minutes": 50,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-17",
+              "type": "rest",
+              "tasks": []
+            },
+            {
+              "date": "2026-11-18",
+              "type": "fitness",
+              "tasks": [
+                {
+                  "id": "FIT-20261118-01",
+                  "title": "有氧：慢跑 5 公里",
+                  "topic": "有氧",
+                  "kind": "fitness",
+                  "priority": "P1",
+                  "minutes": 50,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-19",
+              "type": "rest",
+              "tasks": []
+            },
+            {
+              "date": "2026-11-20",
+              "type": "fitness",
+              "tasks": [
+                {
+                  "id": "FIT-20261120-01",
+                  "title": "有氧：慢跑 5 公里",
+                  "topic": "有氧",
+                  "kind": "fitness",
+                  "priority": "P1",
+                  "minutes": 50,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            },
+            {
+              "date": "2026-11-21",
+              "type": "rest",
+              "tasks": []
+            },
+            {
+              "date": "2026-11-22",
+              "type": "rest",
+              "tasks": []
+            },
+            {
+              "date": "2026-11-23",
+              "type": "fitness",
+              "tasks": [
+                {
+                  "id": "FIT-20261123-01",
+                  "title": "有氧：慢跑 5 公里",
+                  "topic": "有氧",
+                  "kind": "fitness",
+                  "priority": "P1",
+                  "minutes": 50,
+                  "slot": "晚",
+                  "done": false,
+                  "doneAt": null
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
