@@ -27,7 +27,9 @@ if ($LASTEXITCODE -ne 0) { throw "单元测试未通过，已停止打包" }
 
 $Mode = if ($Onedir) { 'onedir' } else { 'onefile' }
 Write-Host "开始打包（$Mode）..."
+if ($Onedir) { $env:PCB_ONEDIR = "1" } else { Remove-Item Env:PCB_ONEDIR -ErrorAction SilentlyContinue }
 & $Py -m PyInstaller (Join-Path $Root "build\PlanCheckBox.spec") --noconfirm --clean --distpath (Join-Path $Root "dist") --workpath (Join-Path $Root "build\.cache")
+Remove-Item Env:PCB_ONEDIR -ErrorAction SilentlyContinue
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller 打包失败" }
 
 if ($Onedir) {

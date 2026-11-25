@@ -10,7 +10,7 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from . import jsonio, model, store
+from . import jsonio, model, progress, store
 from .dates import (add_days, fmt_minutes, fmt_range, local_date, month_label,
                     now_local_iso, parse_iso_date, weekday_text, week_label)
 from .parser import Group, Task, build, clean_history, display_name_from_file_name
@@ -29,6 +29,10 @@ class FileEntry:
     raw: dict | None = None
     group: Group | None = None
     error: str = ""
+    progress_path: str = ""
+    fingerprint: dict = field(default_factory=dict)
+    progress: dict | None = None
+    progress_error: str = ""
 
 
 class AppService:
@@ -43,6 +47,7 @@ class AppService:
         self.ov_month = ""
         self.day_detail = ""
         self.last_write = ""
+        self.notices: dict[str, str] = {}
         self._restore()
 
     # ------------------------------------------------------------------ 基础
@@ -59,12 +64,26 @@ class AppService:
 
     def _load_path(self, path: str) -> FileEntry:
         entry = FileEntry(path=path, file_name=os.path.basename(path),
-                          display_name=display_name_from_file_name(os.path.basename(path)))
+                          display_name=display_name_from_file_name(os.path.basename(path)),
+                          progress_path=str(progress.progress_path(path)))
+        self._note(entry, self._refresh(entry))
+        return entry
+
+    def _note(self, entry: FileEntry, message: str) -> None:
+        if message:
+            self.notices[entry.path] = message
+        else:
+            self.notices.pop(entry.path, None)
+
+    def _refresh(self, entry: FileEntry) -> str:
+        """重新读取题库文件，并套用同名进度文件；返回需要提示给用户的一句话。"""
+        entry.error = ""
+        entry.progress_error = ""
         try:
-            text = jsonio.read_text(path)
+            text = jsonio.read_text(entry.path)
         except OSError as exc:
             entry.error = f"文件读取失败：{exc.strerror or exc}"
-            return entry
+            return ""
         entry.text = text
         entry.digest = jsonio.digest(text)
         entry.fmt = jsonio.detect_format(text)
@@ -72,15 +91,60 @@ class AppService:
             raw = json.loads(text)
         except ValueError:
             entry.error = "不是合法的 JSON（文件内容无法解析，可能已损坏或被截断）"
-            return entry
-        result = build(raw, entry.file_name, entry.display_name, path)
-        if result.ok and result.group:
-            entry.raw = raw
-            entry.group = result.group
-            entry.display_name = result.group.display_name
-        else:
+            return ""
+        result = build(raw, entry.file_name, entry.display_name, entry.path)
+        if not result.ok or result.group is None:
             entry.error = f"JSON 结构不完整：{result.error}"
-        return entry
+            return ""
+        entry.raw = raw
+        entry.group = result.group
+        entry.display_name = result.group.display_name
+        entry.fingerprint = progress.fingerprint(raw, entry.group)
+        return self._attach_progress(entry)
+
+    def _attach_progress(self, entry: FileEntry) -> str:
+        """套用进度文件：同指纹直接合并，不同指纹迁移，没有则从旧格式内嵌状态生成。"""
+        note = ""
+        try:
+            doc = progress.read(entry.progress_path)
+        except progress.ProgressError as exc:
+            # 文件坏了：只读不写，避免把用户的记录覆盖掉
+            entry.progress = None
+            entry.progress_error = str(exc)
+            return (f"进度文件无法使用：{entry.progress_path}\n{exc}\n"
+                    "为避免覆盖已有记录，程序不会改写它；请备份后删除该文件再重试。")
+
+        if doc is not None:
+            unchanged = progress.same_source(doc.get("source"), entry.fingerprint)
+            doc, report = progress.resolve(doc, entry.group, entry.fingerprint)
+            progress.apply(entry.group, doc)
+            entry.progress = doc
+            if report.message:
+                note = report.message
+            if not unchanged:
+                doc["source"]["file"] = entry.file_name
+                try:
+                    progress.write(entry.path, doc)
+                except OSError as exc:
+                    note = f"{note}\n进度文件写入失败：{exc.strerror or exc}（本次仅保存在内存中）" \
+                        if note else f"进度文件写入失败：{exc.strerror or exc}"
+            return note
+
+        # 老式单文件：done/doneAt/history 内嵌在题库里 → 生成进度文件，但不改题库
+        legacy = progress.legacy_records(entry.group)
+        if not legacy:
+            return ""
+        doc = progress.empty_doc(entry.fingerprint, entry.file_name)
+        doc["tasks"] = legacy
+        entry.progress = doc
+        try:
+            progress.write(entry.path, doc)
+            return (f"已从旧格式题库读出 {len(legacy)} 条完成记录，"
+                    f"生成进度文件 {os.path.basename(entry.progress_path)}（题库未被修改）。")
+        except OSError as exc:
+            return (f"已从旧格式题库读出 {len(legacy)} 条记录，但无法创建"
+                    f"{os.path.basename(entry.progress_path)}：{exc.strerror or exc}\n"
+                    "请把题库放到可写目录，或先保存到别处再重试。")
 
     # ------------------------------------------------------------------ 会话
     def _restore(self) -> None:
@@ -148,6 +212,7 @@ class AppService:
     def remove_file(self, path: str) -> dict:
         self.files = [f for f in self.files if f.path != path]
         self.expanded = {k: v for k, v in self.expanded.items() if not k.startswith(f"{path}#")}
+        self.notices.pop(path, None)
         if not self.groups:
             self.route = {"page": 1, "group_path": None, "month_id": None}
             self.active_week = ""
@@ -164,6 +229,7 @@ class AppService:
         self.active_week = ""
         self.heat_tip = ""
         self.day_detail = ""
+        self.notices = {}
         self.route = {"page": 1, "group_path": None, "month_id": None}
         store.clear_session()
         return {"ok": True, "message": "已清空已选文件"}
@@ -283,56 +349,70 @@ class AppService:
         return {"ok": True}
 
     def toggle_task(self, path: str, task_id: str, checked: bool) -> dict:
+        """只写进度文件；题库 JSON 保持只读（外部改动时重新载入，不覆盖）。"""
         entry = self.find_file(path)
         if entry is None or entry.group is None:
             return {"ok": False, "message": "找不到该组数据，请重新选择文件", "kind": "error"}
         task = next((t for t in entry.group.tasks if t.id == task_id), None)
         if task is None:
             return {"ok": False, "message": "找不到该任务，计划可能已更新", "kind": "error"}
+        if entry.progress_error:
+            return {"ok": False, "message": f"进度文件不可用，未写入：{entry.progress_error}", "kind": "error"}
 
-        now = now_local_iso()
-        history = list(task.history) + [{"action": "done" if checked else "undone", "at": now}]
-        history = clean_history(history)
-        done_at = now if checked else (task.done_at or model.last_done_at(task))
-
+        external = ""
         try:
             current_text = jsonio.read_text(path)
         except OSError as exc:
-            return {"ok": False, "message": f"写回失败：{exc.strerror or exc}", "kind": "error"}
+            return {"ok": False, "message": f"读取题库失败：{exc.strerror or exc}", "kind": "error"}
+        if jsonio.digest(current_text) != entry.digest:
+            self._note(entry, self._refresh(entry))
+            if entry.group is None:
+                return {"ok": False, "message": f"题库文件已变化且无法解析：{entry.error}", "kind": "error"}
+            task = next((t for t in entry.group.tasks if t.id == task_id), None)
+            if task is None:
+                return {"ok": False, "message": "题库已更新，目标任务已不存在，请重新载入。", "kind": "error"}
+            external = "（题库文件已被外部更新，已重新载入）"
+
+        now = now_local_iso()
+        history = clean_history(list(task.history) + [{"action": "done" if checked else "undone", "at": now}])
+        done_at = now if checked else (task.done_at or model.last_done_at(task))
+
         try:
-            fresh_raw = json.loads(current_text)
-        except ValueError:
-            return {"ok": False, "message": "写回失败：原文件已不是合法 JSON（可能被外部改动）", "kind": "error"}
+            disk = progress.read(entry.progress_path)
+        except progress.ProgressError as exc:
+            return {"ok": False, "message": f"进度文件不可用，未写入：{exc}", "kind": "error"}
 
-        if not jsonio.apply_task(fresh_raw, task_id, checked, done_at, history):
-            return {"ok": False, "message": "写回失败：目标任务在文件中已不存在（计划可能被重新生成）", "kind": "error"}
-
-        fmt = jsonio.detect_format(current_text)
-        text = jsonio.serialize(fresh_raw, fmt)
-        try:
-            jsonio.write_text_atomic(path, text)
-        except OSError as exc:
-            return {"ok": False, "message": f"写回失败：{exc.strerror or exc}", "kind": "error"}
-
-        external = entry.digest and entry.digest != jsonio.digest(current_text)
-        self.last_write = now
-        refreshed = self._load_path(path)
-        if refreshed.group is not None:
-            idx = self.files.index(entry)
-            self.files[idx] = refreshed
+        migrated = ""
+        if disk is not None:
+            doc, report = progress.resolve(disk, entry.group, entry.fingerprint)
+            migrated = report.message
         else:
-            entry.raw = fresh_raw
-            entry.text = text
-            entry.digest = jsonio.digest(text)
-            entry.fmt = fmt
-            task.done = checked
-            task.done_at = done_at
-            task.history = history
+            doc = progress.empty_doc(entry.fingerprint, entry.file_name)
+            if entry.progress:
+                doc["tasks"] = dict(entry.progress.get("tasks") or {})
+                doc["unmatched"] = dict(entry.progress.get("unmatched") or {})
+        progress.set_record(doc, task_id, task.title, checked, done_at, history)
+        doc["updatedAt"] = now
+        doc.setdefault("source", {})["file"] = entry.file_name
+        try:
+            progress.write(entry.path, doc)
+        except OSError as exc:
+            return {"ok": False, "message": f"进度写入失败：{exc.strerror or exc}", "kind": "error"}
+
+        entry.progress = doc
+        entry.progress_error = ""
+        self.last_write = now
+        task.done = checked
+        task.done_at = done_at
+        task.history = history
 
         clock = now[11:19]
-        msg = f"已写回「{os.path.basename(path)}」 · {clock}"
+        msg = (f"已记录「{entry.file_name}」· {clock} · "
+               f"进度存入 {os.path.basename(entry.progress_path)}")
+        if migrated:
+            msg += "；" + migrated
         if external:
-            msg += "（检测到外部改动，已按最新文件内容合并）"
+            msg += external
         return {"ok": True, "message": msg}
 
     # ------------------------------------------------------------------ 导出/导入
@@ -433,7 +513,7 @@ class AppService:
 
         if not count:
             return {"ok": False, "message": "文件里没有可导入的完成记录", "kind": "error"}
-        msg = f"已导入 {count} 条记录，应用到 {applied} 个任务（未写盘，重新勾选即写回）"
+        msg = f"已导入 {count} 条记录，应用到 {applied} 个任务（未写盘，重新勾选即写入进度文件）"
         return {"ok": True, "message": msg}
 
     # ------------------------------------------------------------------ 视图
@@ -469,6 +549,8 @@ class AppService:
             "today": self.today.isoformat(),
             "lastWrite": self.last_write,
         }
+        if self.notices:
+            view["notice"] = "\n".join(self.notices.values())
         if page == 1:
             view["page1"] = self._page1()
         elif page == 2:
@@ -551,8 +633,8 @@ class AppService:
             "files": rows,
             "total": len(self.files),
             "valid": len(valid),
-            "writeStatus": ("自动写盘已开启：勾选后会直接写回该组原 JSON（只改 done / doneAt / history）"
-                            if valid else "选择文件后自动开启写盘"),
+            "writeStatus": ("勾选后自动写入独立的 *_progress.json；题库 JSON 保持只读，不会被修改"
+                            if valid else "选择文件后自动开启进度记录"),
         }
 
     # ---- 第 2 页

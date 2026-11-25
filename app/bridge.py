@@ -14,7 +14,14 @@ class Api:
 
     # ---------------------------------------------------------------- 视图
     def get_view(self) -> dict:
+        from .core import store
+
         view = self.service.build_view()
+        issue = store.pop_issue()
+        if issue:
+            view = dict(view)
+            existing = view.get("notice")
+            view["notice"] = f"{existing}\n{issue}" if existing else issue
         self._sync_title(view)
         return view
 

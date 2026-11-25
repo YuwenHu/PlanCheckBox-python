@@ -36,6 +36,11 @@ class ServiceCase(unittest.TestCase):
         support.write_json(path, support.plan_json(tasks, **kwargs))
         return path
 
+    def make_bank(self, name, tasks, **kwargs):
+        path = self.tmp / name
+        support.write_json(path, support.bank_json(tasks, **kwargs))
+        return path
+
 
 class Page1Test(ServiceCase):
     def test_sorted_by_task_count_and_name_fallback(self):
@@ -142,54 +147,49 @@ class NavigationTest(ServiceCase):
 class ToggleTest(ServiceCase):
     def setUp(self):
         super().setUp()
-        self.path = self.make_file("math2_checkbox_use.json",
+        self.path = self.make_bank("math2_checkbox_use.json",
                                    [support.task("t1", "行列式", "2026-11-02", extra_field={"keep": 1}),
                                     support.task("t2", "矩阵", "2026-11-03")],
                                    group_name="数二", day_extra={"note": "保留字段"})
+        self.progress_path = self.tmp / "math2_checkbox_use_progress.json"
         self.svc = AppService()
         self.svc.add_paths([str(self.path)])
         self.svc.dispatch("to_overview")
         self.svc.dispatch("open_group", {"path": str(self.path)})
 
-    def read_raw(self):
-        return json.loads(self.path.read_text(encoding="utf-8"))
+    def read_progress(self):
+        return json.loads(self.progress_path.read_text(encoding="utf-8"))
 
-    def find(self, raw, task_id):
-        for m in raw["months"]:
-            for w in m["weeks"]:
-                for d in w["days"]:
-                    for t in d["tasks"]:
-                        if t["id"] == task_id:
-                            return t
-        raise AssertionError(task_id)
-
-    def test_check_writes_only_target_and_keeps_format(self):
+    def test_check_writes_progress_only_and_bank_is_untouched(self):
+        before = self.path.read_bytes()
         with mock.patch("app.core.service.now_local_iso", return_value=T1):
             result = self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": True})
         self.assertTrue(result["ok"])
-        raw = self.read_raw()
-        t1 = self.find(raw, "t1")
-        t2 = self.find(raw, "t2")
-        self.assertTrue(t1["done"])
-        self.assertEqual(t1["doneAt"], T1)
-        self.assertEqual(t1["history"], [{"action": "done", "at": T1}])
-        self.assertEqual(t2["done"], False)
-        self.assertIn("keep", t1["extra_field"])
-        day = raw["months"][0]["weeks"][0]["days"][0]
-        self.assertEqual(list(day.keys()), ["date", "type", "tasks", "note"])
-        text = self.path.read_text(encoding="utf-8")
-        self.assertTrue(text.endswith("}\n"))
-        self.assertNotIn("\r\n", text)
+        self.assertIn("_progress.json", result["message"])
+        self.assertEqual(self.path.read_bytes(), before, "题库文件必须保持只读")
+
+        doc = self.read_progress()
+        self.assertEqual(doc["format"], "plancheckbox-progress")
+        self.assertEqual(doc["version"], 1)
+        self.assertTrue(doc["source"]["hash"])
+        self.assertEqual(doc["source"]["taskCount"], 2)
+        self.assertEqual(doc["source"]["file"], "math2_checkbox_use.json")
+        rec = doc["tasks"]["t1"]
+        self.assertTrue(rec["done"])
+        self.assertEqual(rec["doneAt"], T1)
+        self.assertEqual(rec["history"], [{"action": "done", "at": T1}])
+        self.assertEqual(rec["title"], "行列式")
+        self.assertNotIn("t2", doc["tasks"])
 
     def test_uncheck_keeps_latest_done_at(self):
         with mock.patch("app.core.service.now_local_iso", return_value=T1):
             self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": True})
         with mock.patch("app.core.service.now_local_iso", return_value=T2):
             self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": False})
-        t1 = self.find(self.read_raw(), "t1")
-        self.assertEqual(t1["done"], False)
-        self.assertEqual(t1["doneAt"], T1)
-        self.assertEqual([h["action"] for h in t1["history"]], ["done", "undone"])
+        rec = self.read_progress()["tasks"]["t1"]
+        self.assertFalse(rec["done"])
+        self.assertEqual(rec["doneAt"], T1)
+        self.assertEqual([h["action"] for h in rec["history"]], ["done", "undone"])
 
     def test_recheck_uses_latest_time(self):
         with mock.patch("app.core.service.now_local_iso", return_value=T1):
@@ -198,10 +198,10 @@ class ToggleTest(ServiceCase):
             self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": False})
         with mock.patch("app.core.service.now_local_iso", return_value=T3):
             self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": True})
-        t1 = self.find(self.read_raw(), "t1")
-        self.assertTrue(t1["done"])
-        self.assertEqual(t1["doneAt"], T3)
-        self.assertEqual([h["at"] for h in t1["history"]], [T1, T2, T3])
+        rec = self.read_progress()["tasks"]["t1"]
+        self.assertTrue(rec["done"])
+        self.assertEqual(rec["doneAt"], T3)
+        self.assertEqual([h["at"] for h in rec["history"]], [T1, T2, T3])
 
     def test_in_memory_state_refreshes(self):
         with mock.patch("app.core.service.now_local_iso", return_value=T1):
@@ -212,38 +212,69 @@ class ToggleTest(ServiceCase):
         self.assertEqual(card["done"], 1)
         self.assertTrue(any(t["was"].startswith("已完成") for t in card["tasks"]))
 
-    def test_external_plan_edit_is_merged(self):
-        raw = self.read_raw()
+    def test_external_plan_edit_is_reloaded(self):
+        raw = json.loads(self.path.read_text(encoding="utf-8"))
         raw["months"][0]["weeks"][0]["days"][0]["tasks"].append({
             "id": "t3", "title": "新增题", "priority": "P0", "kind": "study", "topic": "高数",
-            "minutes": 25, "slot": "晚上", "done": False, "doneAt": None, "history": [],
+            "minutes": 25, "slot": "晚上",
         })
         support.write_json(self.path, raw)
         with mock.patch("app.core.service.now_local_iso", return_value=T1):
             result = self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": True})
         self.assertTrue(result["ok"])
-        self.assertIn("外部改动", result["message"])
-        raw = self.read_raw()
-        ids = [t["id"] for m in raw["months"] for w in m["weeks"] for d in w["days"] for t in d["tasks"]]
+        self.assertIn("外部更新", result["message"])
+        ids = [t.id for t in self.svc.groups[0].tasks]
         self.assertIn("t3", ids)
-        self.assertEqual(self.find(raw, "t3")["done"], False)
-        self.assertTrue(self.find(raw, "t1")["done"])
+        doc = self.read_progress()
+        self.assertTrue(doc["tasks"]["t1"]["done"])
+        self.assertNotIn("t3", doc["tasks"])
 
     def test_unknown_task_is_rejected(self):
         result = self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "nope", "checked": True})
         self.assertFalse(result["ok"])
-        self.assertEqual(self.find(self.read_raw(), "t1")["done"], False)
+        self.assertFalse(self.progress_path.exists())
 
-    def test_crlf_and_four_space_preserved(self):
+    def test_corrupt_progress_file_blocks_write_and_is_preserved(self):
+        self.progress_path.write_text("{oops", encoding="utf-8")
+        svc = AppService()
+        svc.add_paths([str(self.path)])
+        self.assertIn("进度文件无法使用", svc.notices.get(str(self.path), ""))
+        result = svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": True})
+        self.assertFalse(result["ok"])
+        self.assertIn("进度文件不可用", result["message"])
+        self.assertEqual(self.progress_path.read_text(encoding="utf-8"), "{oops")
+
+    def test_bank_keeps_crlf_and_four_space_forever(self):
         obj = json.loads(self.path.read_text(encoding="utf-8"))
         support.write_json(self.path, obj, indent=4, crlf=True)
+        before = self.path.read_bytes()
         self.svc = AppService()
         self.svc.add_paths([str(self.path)])
         with mock.patch("app.core.service.now_local_iso", return_value=T1):
-            self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": True})
-        text = self.path.read_bytes().decode("utf-8")
-        self.assertIn("\r\n", text)
-        self.assertIn('\r\n    "meta"', text)
+            result = self.svc.dispatch("toggle_task", {"path": str(self.path), "id": "t1", "checked": True})
+        self.assertTrue(result["ok"])
+        self.assertEqual(self.path.read_bytes(), before)
+        self.assertIn("t1", self.read_progress()["tasks"])
+
+
+class LegacyInlineTest(ServiceCase):
+    def test_inline_state_migrates_without_rewriting_bank(self):
+        path = self.make_file("math2_checkbox_use.json", [
+            support.task("a", "A", "2026-11-02", done=True, done_at=T1,
+                         history=[{"action": "done", "at": T1}]),
+            support.task("b", "B", "2026-11-03"),
+        ], group_name="数二")
+        before = path.read_bytes()
+        svc = AppService()
+        svc.add_paths([str(path)])
+        progress_path = self.tmp / "math2_checkbox_use_progress.json"
+        self.assertTrue(progress_path.exists(), "读取老文件时应生成进度文件")
+        self.assertEqual(path.read_bytes(), before, "老题库文件不能被改写")
+        doc = json.loads(progress_path.read_text(encoding="utf-8"))
+        self.assertTrue(doc["tasks"]["a"]["done"])
+        self.assertNotIn("b", doc["tasks"])
+        self.assertEqual(len(svc.groups[0].tasks), 2)
+        self.assertTrue(next(t for t in svc.groups[0].tasks if t.id == "a").done)
 
 
 class CalendarAndStatsTest(ServiceCase):

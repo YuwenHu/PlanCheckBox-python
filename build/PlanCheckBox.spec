@@ -6,9 +6,12 @@
 产物：dist/PlanCheckBox.exe（再复制到仓库根目录，build.ps1 会自动做）。
 """
 from pathlib import Path
+import os
 
 ROOT = Path(SPECPATH).resolve().parent
 VERSION_FILE = ROOT / "app" / "version_info.txt"
+# build.ps1 -Onedir 会设置该变量，走 COLLECT 产出目录形态（不解包、无 _MEI* 残留）
+ONEDIR = os.environ.get("PCB_ONEDIR") == "1"
 
 
 def bundle(folder: str):
@@ -39,11 +42,12 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.datas,
+    [] if ONEDIR else a.binaries,
+    [] if ONEDIR else a.datas,
     [],
     name="PlanCheckBox",
     debug=False,
+    exclude_binaries=ONEDIR,
     bootloader_ignore_signals=False,
     strip=False,
     upx=False,
@@ -53,3 +57,6 @@ exe = EXE(
     icon=str(ROOT / "assets" / "icon.ico"),
     version=str(VERSION_FILE) if VERSION_FILE.exists() else None,
 )
+
+if ONEDIR:
+    COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="PlanCheckBox")

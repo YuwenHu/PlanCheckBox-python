@@ -76,6 +76,9 @@ def selftest() -> int:
     from app.core import store
 
     resolved = store.data_dir()
+    notice = store.pop_issue()
+    if notice:
+        print(f"data_dir_notice = {notice.splitlines()[0]}", flush=True)
     os.environ["PLANCHECKBOX_DATA_DIR"] = tempfile.mkdtemp(prefix="pcb-selftest-")
     from app.core.service import AppService
 
@@ -86,6 +89,21 @@ def selftest() -> int:
     view = service.build_view()
     print(f"{APP_NAME} {VERSION} selftest ok · page={view['page']} · groups={len(service.groups)}"
           f" · data_dir={resolved}")
+    return 0
+
+
+def clean_temp() -> int:
+    """非交互清理 %TEMP% 下残留的 _MEI* 解包目录，并打印明细。"""
+    from app.core import tempclean
+
+    result = tempclean.sweep()
+    for path, size in result.removed:
+        print(f"removed {path} ({size / 1024 / 1024:.1f} MB)", flush=True)
+    for path, reason in result.skipped:
+        print(f"skipped {path} ({reason})", flush=True)
+    for path, error in result.failed:
+        print(f"failed  {path} ({error})", flush=True)
+    print(f"clean-temp {result.summary()}", flush=True)
     return 0
 
 
@@ -135,7 +153,11 @@ def run_gui(diag: bool = False) -> int:
     from app.core import store
     from app.core.service import AppService
 
-    service = AppService()
+    try:
+        service = AppService()
+    except store.DataDirUnavailable as exc:
+        show_message(f"{exc}\n\n程序无法安全保存数据，已停止启动以免丢失进度。")
+        return 5
     api = Api(service)
     window = webview.create_window(
         "任务进度追踪",
@@ -173,9 +195,16 @@ def main(argv=None) -> int:
     parser.add_argument("--version", action="version", version=f"{APP_NAME} {VERSION}")
     parser.add_argument("--selftest", action="store_true", help="无界面自检（导入 + 解析示例 + 构建视图）")
     parser.add_argument("--diag", action="store_true", help="启动界面并读回 DOM 指标后自动退出（打包后自检）")
+    parser.add_argument("--clean-temp", action="store_true",
+                        help="清理 %%TEMP%% 下残留的 _MEI* 解包目录后退出（不启动界面）")
     args = parser.parse_args(argv)
     if args.selftest:
         return selftest()
+    if args.clean_temp:
+        return clean_temp()
+    # onefile 每次启动的残留目录：启动时顺手清扫一次（失败不影响启动）
+    from app.core import tempclean
+    tempclean.auto_sweep()
     try:
         return run_gui(diag=args.diag)
     except Exception:

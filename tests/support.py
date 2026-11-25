@@ -108,6 +108,19 @@ def plan_json(tasks, *, group_name="数学", subject="数学", kind="study", pla
     return out
 
 
+def bank_json(tasks, **kwargs) -> dict:
+    """新格式题库：任务里不带 done / doneAt / history（进度独立到 _progress.json）。"""
+    obj = plan_json(tasks, **kwargs)
+    for month in obj["months"]:
+        for week in month["weeks"]:
+            for day in week["days"]:
+                for task in day["tasks"]:
+                    task.pop("done", None)
+                    task.pop("doneAt", None)
+                    task.pop("history", None)
+    return obj
+
+
 def write_json(path: Path, obj, *, indent=2, crlf=False) -> str:
     text = json.dumps(obj, ensure_ascii=False, indent=indent)
     if crlf:
